@@ -7,4 +7,5 @@
       - feh
       - dunst
       - lxappearance
+      - kitty
     state: latest
