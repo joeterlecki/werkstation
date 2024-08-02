@@ -1,0 +1,21 @@
+---
+- name: Update Sytem via DNF
+  ansible.builtin.dnf:
+    name: "*"
+    state: latest
+    update_cache: true
+- name: Ensure dnf-plugins-core is installed
+  ansible.builtin.dnf:
+    name: dnf-plugins-core
+    state: present
+- name: Configure DNF settings for better performance
+  lineinfile:
+    path: /etc/dnf/dnf.conf
+    regexp: "^{{ item.option }}="
+    line: "{{ item.option }}={{ item.value }}"
+    state: present
+  with_items:
+    - { option: "max_parallel_downloads", value: "10" }
+    - { option: "fastestmirror", value: "true" }
+    - { option: "deltarpm", value: "true" }
+    - { option: "metadata_expire", value: "1h" }

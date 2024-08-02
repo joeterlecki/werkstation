@@ -1,0 +1,10 @@
+---
+- name: Install i3wm and related pkgs
+  ansible.builtin.dnf:
+    name:
+      - i3
+      - picom
+      - feh
+      - dunst
+      - lxappearance
+    state: latest

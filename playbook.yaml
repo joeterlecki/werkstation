@@ -1,0 +1,6 @@
+---
+- name: Configure Werkstation
+  hosts: all
+  become: true
+  roles:
+    - "./roles/werkstation"

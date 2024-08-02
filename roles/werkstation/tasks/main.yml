@@ -1,0 +1,4 @@
+---
+- ansible.builtin.import_tasks: update_system.yml
+- ansible.builtin.import_tasks: install_core_pkgs.yml
+- ansible.builtin.import_tasks: install_i3wm_pkgs.yml
