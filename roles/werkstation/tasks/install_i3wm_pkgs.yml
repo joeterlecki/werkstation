@@ -8,4 +8,5 @@
       - dunst
       - lxappearance
       - kitty
+      - xclip
     state: latest

@@ -18,6 +18,8 @@
   args:
     creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
   when: nvm_check.rc != 0
+- name: INstall Latest Node NVM
+  ansible.builtin.command: nvm install --lts
 - name: Download gdu binary
   get_url:
     url: https://github.com/dundee/gdu/releases/download/v5.29.0/gdu_linux_amd64.tgz
@@ -25,15 +27,14 @@
 - name: Extract gdu binary
   unarchive:
     src: /tmp/gdu_linux_amd64.tgz
-    dest: /tmp/gdu_linux
+    dest: /tmp/
     remote_src: yes
-    mode: "0755"
 - name: Ensure gdu name
-  command: mv /tmp/gdu_linux/gdu_linux_amd64 /usr/local/bin/gdu
-# - name: Ensure gdu is executable
-#   file:
-#     path: /usr/local/bin/gdu
-#     mode: "0755"
+  command: mv /tmp/gdu_linux_amd64 /usr/local/bin/gdu
+- name: Ensure gdu is executable
+  file:
+    path: /usr/local/bin/gdu
+    mode: "0755"
 - name: Instal Neovim Dependencies
   ansible.builtin.dnf:
     name:
@@ -51,7 +52,12 @@
     src: /tmp/lazydocker.tar.gz
     dest: /usr/local/bin/
     remote_src: yes
-# - name: Ensure lazydocker is executable
-#   file:
-#     path: /usr/local/bin/lazydocker
-#     mode: "0755"
+- name: Ensure lazydocker is executable
+  file:
+    path: /usr/local/bin/lazydocker
+    mode: "0755"
+- name: Install AstroNvim Vanilla # TODO clone personal later
+  ansible.builtin.git:
+    repo: https://github.com/AstroNvim/template
+    dest: /home/root/.config/nvim
+    separate_git_dir: /home/root/.config/nvim
