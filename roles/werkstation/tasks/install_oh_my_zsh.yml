@@ -31,4 +31,18 @@
     dest: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
     version: master 
   when: ohmyzsh_install
-
+- name: Replace ZSHRC
+  copy:
+    src: "{{ playbook_dir }}/dotfiles/zsh/zshrc"
+    dest: "{{ ansible_env.HOME }}/.zshrc"
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+    mode: "0644"
+  when: ohmyzsh_install
+- name: Configure P10k
+  copy:
+    src: "{{ playbook_dir }}/dotfiles/zsh/p10k.zsh"
+    dest: "{{ ansible_env.HOME }}/.p10k.zsh"
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+    mode: "0644"
