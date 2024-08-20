@@ -1,5 +1,6 @@
 ---
-- name: Install i3wm and related pkgs
+- name: Install DNF i3wm and related pkgs
+  become: true
   ansible.builtin.dnf:
     name:
       - i3
@@ -7,6 +8,5 @@
       - feh
       - dunst
       - lxappearance
-      - kitty
       - xclip
     state: latest

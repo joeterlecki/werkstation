@@ -1,14 +1,17 @@
 ---
 - name: Update Sytem via DNF
+  become: true
   ansible.builtin.dnf:
     name: "*"
     state: latest
     update_cache: true
 - name: Ensure dnf-plugins-core is installed
+  become: true
   ansible.builtin.dnf:
     name: dnf-plugins-core
     state: present
 - name: Configure DNF settings for better performance
+  become: true
   lineinfile:
     path: /etc/dnf/dnf.conf
     regexp: "^{{ item.option }}="

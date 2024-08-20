@@ -1,6 +1,7 @@
 ---
 - name: Configure Werkstation
-  hosts: all
-  become: true
+  hosts: localhost
+  connection: local
+  become: false
   roles:
     - "./roles/werkstation"

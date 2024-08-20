@@ -1,4 +1,5 @@
-- name: Install necessary packages
+- name: Install necessary DNF packages
+  become: true
   ansible.builtin.dnf:
     name:
       - git
@@ -6,7 +7,6 @@
       - wget
       - zip
       - unzip
-      - power-profiles-daemon
       - kernel-devel
       - kernel-headers
       - gcc
@@ -17,8 +17,11 @@
       - libglvnd-opengl
       - libglvnd-devel
       - pkgconfig
+      - zsh
+      # - power-profiles-daemon Install sepearte step/flag for laptop
     state: latest
 - name: "Add rpmfustion repo gpg keys"
+  become: true
   ansible.builtin.rpm_key:
     key: "{{ item }}"
     state: present
@@ -26,15 +29,26 @@
     - "https://rpmfusion.org/keys?action=AttachFile&do=get&target=RPM-GPG-KEY-rpmfusion-free-fedora-2020"
     - "https://rpmfusion.org/keys?action=AttachFile&do=get&target=RPM-GPG-KEY-rpmfusion-nonfree-fedora-2020"
 - name: Enable the RPM Free Fusion Free repository
+  become: true
   dnf:
     name: "https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-40.noarch.rpm"
     state: present
 - name: Enable the RPM Fusion NonFree repository
+  become: true
   dnf:
     name: "https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-40.noarch.rpm"
     state: present
 - name: Install Nvidia Drivers
+  become: true
   ansible.builtin.dnf:
     name:
       - akmod-nvidia
       - xorg-x11-drv-nvidia-cuda
+    state: latest
+- name: Uninstall DNF Packages
+  become: true
+  ansible.builtin.dnf:
+    name:
+      - dnfdragora
+      - xorg-x11-drv-nouveau
+    state: absent
