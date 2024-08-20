@@ -105,3 +105,8 @@
   copy:
     src: "{{ playbook_dir }}/dotfiles/backgrounds/."
     dest: "{{ ansible_env.HOME}}/Pictures/"
+- name: Setup i3volume
+  git:
+    repo: "https://github.com/hastinbe/i3-volume"
+    dest:  "{{ ansible_env.HOME }}/i3-volume"
+    version: master

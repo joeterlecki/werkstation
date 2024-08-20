@@ -43,7 +43,7 @@ set $refresh_i3status killall -SIGUSR1 i3status
 
 # i3 volume patch
 # https://github.com/hastinbe/i3-volume
-set $volumePath ~/repos/public/i3-volume
+set $volumePath ~/i3-volume
 set $statusCMD i3status
 
 set $statusSig SIGUSR1
