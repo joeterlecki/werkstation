@@ -52,3 +52,19 @@
       - dnfdragora
       - xorg-x11-drv-nouveau
     state: absent
+- name: Blacklist Nouveau
+  become: true
+  copy:
+    dest: /etc/modprobe.d/blacklist-nouveau.conf
+    content: |
+      blacklist nouveau
+      options nouveau modeset=0
+    owner: root
+    group: root
+    mode: "0644"
+  register: blacklist_conf
+  changed_when: blacklist_conf.changed
+- name: Regenerate initramfs to apply changes
+  become: true
+  command: dracut --force
+  when: blacklist_conf.changed
