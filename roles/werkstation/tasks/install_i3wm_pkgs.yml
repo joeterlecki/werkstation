@@ -11,3 +11,97 @@
       - xclip
       - kitty
     state: latest
+- name: Check for i3 config directory
+  stat:
+    path: "{{ ansible_env.HOME }}/.config/i3"
+  register: i3_config
+- name: Create i3 Config if not exists
+  file:
+    path: "{{ ansible_env.HOME }}/.config/i3"
+    state: directory
+    mode: "0755"
+  when: not i3_config.stat.exists
+- name: Copy i3 Config
+  copy:
+    src: "{{ playbook_dir }}/dotfiles/i3/config"
+    dest: "{{ ansible_env.HOME }}/.config/i3/config"
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+    mode: "0755"
+  when: not i3_config.stat.exists
+- name: Check i3status config
+  stat:
+    path: "{{ ansible_env.HOME }}/.config/i3status"
+  register: i3status_config
+- name: Create i3status config if not exists
+  file:
+    path: "{{ ansible_env.HOME }}/.config/i3status"
+    state: directory
+    mode: "0755"
+  when: not i3status_config.stat.exists
+- name: Copy i3status Config
+  copy:
+    src: "{{ playbook_dir }}/dotfiles/i3status/config"
+    dest: "{{ ansible_env.HOME }}/.config/i3status/config"
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+    mode: "0755"
+  when: not i3status_config.stat.exists
+- name: Check for dunst config
+  stat:
+    path: "{{ ansible_env.HOME }}/.config/dunst"
+  register: dunst_config
+- name: Create Dunst config if not exists
+  file:
+    path: "{{ ansible_env.HOME }}/.config/dunst"
+    state: directory
+    mode: "0755"
+  when: not dunst_config.stat.exists
+- name: Copy dunst config
+  copy:
+    src: "{{ playbook_dir }}/dotfiles/dunst/dunstrc"
+    dest: "{{ ansible_env.HOME }}/.config/dunst/dunstrc"
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+    mode: "0755"
+  when: not dunst_config.stat.exists
+- name: Check for Picom Config
+  stat:
+    path: "{{ ansible_env.HOME }}/.config/picom"
+  register: picom_config
+- name: Create Picom config if not exists
+  file:
+    path: "{{ ansible_env.HOME }}/.config/picom"
+    state: directory
+    mode: "0755"
+  when: not picom_config.stat.exists
+- name: Copy picom Config
+  copy:
+    src: "{{ playbook_dir }}/dotfiles/picom/picom.conf"
+    dest: "{{ ansible_env.HOME }}/.config/picom/picom.conf"
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+    mode: "0755"
+  when: not picom_config.stat.exists
+- name: Check for kitty config
+  stat:
+    path: "{{ ansible_env.HOME }}/.config/kitty"
+  register: kitty_config
+- name: Create Kitty config if not exists
+  file:
+    path: "{{ ansible_env.HOME }}/.config/kitty"
+    state: directory
+    mode: "0755"
+  when: not kitty_config.stat.exists
+- name: Copy Kitty Config
+  copy:
+    src: "{{ playbook_dir }}/dotfiles/kitty/kitty.conf"
+    dest: "{{ ansible_env.HOME }}/.config/kitty/kitty.conf"
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+    mode: "0755"
+  when: not kitty_config.stat.exists
+- name: Copy Background Images
+  copy:
+    src: "{{ playbook_dir }}/dotfiles/backgrounds/."
+    dest: "{{ ansible_env.HOME}}/Pictures/"

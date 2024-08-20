@@ -1,3 +1,0 @@
-- name: Install Developer Tools with Homebrew Bundle
-  become: false
-  command: brew bundle --file {{ playbook_dir }}/dotfiles/Brewfile

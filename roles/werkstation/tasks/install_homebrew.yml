@@ -3,7 +3,6 @@
   command: brew --version
   register: brew_version
   ignore_errors: yes
-
 - name: Install Homebrew
   become: false
   shell: |
@@ -11,3 +10,6 @@
   when: brew_version.rc != 0
   args:
     executable: /bin/bash
+- name: Install Developer Tools with Homebrew Bundle
+  become: false
+  command: brew bundle --file {{ playbook_dir }}/dotfiles/homebrew/Brewfile

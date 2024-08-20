@@ -33,7 +33,7 @@
   when: ohmyzsh_install
 - name: Replace ZSHRC
   copy:
-    src: "{{ playbook_dir }}/dotfiles/zsh/zshrc"
+    src: "{{ playbook_dir }}/dotfiles/zsh/.zshrc"
     dest: "{{ ansible_env.HOME }}/.zshrc"
     owner: "{{ ansible_user_id }}"
     group: "{{ ansible_user_id }}"
@@ -41,7 +41,7 @@
   when: ohmyzsh_install
 - name: Configure P10k
   copy:
-    src: "{{ playbook_dir }}/dotfiles/zsh/p10k.zsh"
+    src: "{{ playbook_dir }}/dotfiles/zsh/.p10k.zsh"
     dest: "{{ ansible_env.HOME }}/.p10k.zsh"
     owner: "{{ ansible_user_id }}"
     group: "{{ ansible_user_id }}"
