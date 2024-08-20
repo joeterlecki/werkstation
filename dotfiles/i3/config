@@ -43,7 +43,7 @@ set $refresh_i3status killall -SIGUSR1 i3status
 
 # i3 volume patch
 # https://github.com/hastinbe/i3-volume
-set $volumePath ~/i3-volume
+set $volumePath ~/i3-volumgg
 set $statusCMD i3status
 
 set $statusSig SIGUSR1
@@ -249,4 +249,4 @@ set $ws9 9
 
 exec_always --no-startup-id picom --config ~/.config/picom/picom.conf
 exec_always --no-startup-id dunst -config ~/.config/dunst/dunstrc
-exec_always --no-startup-id feh --bg-scale --fill zoom ~/Pictures/field.jpg
+exec_always --no-startup-id feh --bg-scale ~/Pictures/backgrounds/field.jpg
