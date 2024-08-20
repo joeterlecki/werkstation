@@ -1,0 +1,30 @@
+- name: Download Rose Pine Archive
+  get_url:
+    url: "https://github.com/rose-pine/gtk/releases/download/v2.1.0/rose-pine-icons.tar.gz"
+    dest: "/tmp/icons.tar.gz"
+- name: Create extraction directory
+  file:
+    path: /tmp/rose-pine-icons
+    state: directory
+    mode: "0755"
+- name: Create Icons Directory
+  file:
+    path: "{{ ansible_env.HOME }}/.icons"
+    state: directory
+    mode: "0755"
+    owner: "{{ ansible_user_id }}"
+    group: "{{ansible_user_gid | default(ansible_user_id) }}"
+- name: Extract Rose Pine Icon Archive
+  unarchive:
+    src: "/tmp/icons.tar.gz"
+    dest: "/tmp/rose-pine-icons"
+- name: Copy Rose Pine Icons to Icon directory
+  command: cp -a /tmp/rose-pine-icons/icons/. "{{ ansible_env.HOME }}/.icons/"
+- name: Cleanup temp files
+  file:
+    path: "/tmp/rose-pine-icons"
+    state: absent
+    force: true
+- name: Update Icon Cache
+  command: gtk-update-icon-cache "{{ ansible_env.HOME }}/.icons/rose-pine-icons/"
+

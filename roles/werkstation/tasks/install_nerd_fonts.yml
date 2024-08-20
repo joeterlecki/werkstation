@@ -1,0 +1,23 @@
+- name: Create fonts directory
+  file:
+    path: "{{ ansible_env.HOME }}/.fonts"
+    state: directory
+    mode: '0755'
+- name: Download GeistMono Nerd Font
+  get_url:
+    url: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/GeistMono.zip
+    dest: /tmp/GeistMono.zip
+- name: Unzip GeistMono Nerd Font
+  unarchive:
+    src: /tmp/GeistMono.zip
+    dest: "{{ ansible_env.HOME }}/.fonts"
+- name: Download Ubunt Nerd Font
+  get_url:
+    url: "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Ubuntu.zip"
+    dest: /tmp/Ubuntu.zip
+- name: Unzip Ubuntu Nerd Font
+  unarchive:
+    src: /tmp/Ubuntu.zip
+    dest: "{{ ansible_env.HOME }}/.fonts"
+- name: Refresh font cache
+  command: fc-cache -fv

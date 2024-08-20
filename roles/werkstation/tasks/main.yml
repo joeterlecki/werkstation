@@ -1,7 +1,10 @@
 ---
-#- ansible.builtin.import_tasks: update_system.yml
-#- ansible.builtin.import_tasks: install_homebrew.yml
-#- ansible.builtin.import_tasks: install_core_pkgs.yml
+- ansible.builtin.import_tasks: update_system.yml
+- ansible.builtin.import_tasks: install_homebrew.yml
+- ansible.builtin.import_tasks: install_core_pkgs.yml
+- ansible.builtin.import_tasks: install_nerd_fonts.yml
+- ansible.builtin.import_tasks: install_gtk_theme.yml
+- ansible.builtin.import_tasks: install_icon_theme.yml
 - ansible.builtin.import_tasks: install_homebrew_pkgs.yml
 - ansible.builtin.import_tasks: install_i3wm_pkgs.yml
-#- ansible.builtin.import_tasks: install_neovim_deps.yml
+- ansible.builtin.import_tasks: install_neovim_deps.yml

@@ -1,0 +1,27 @@
+- name: Download Rose Pine Archive
+  get_url:
+    url: "https://github.com/rose-pine/gtk/releases/download/v2.1.0/gtk3.tar.gz"
+    dest: "/tmp/gtk3.tar.gz"
+- name: Create extraction directory
+  file:
+    path: /tmp/rose-pine-gtk
+    state: directory
+    mode: "0755"
+- name: Create Theme Directory
+  file:
+    path: "{{ ansible_env.HOME }}/.themes"
+    state: directory
+    mode: "0755"
+    owner: "{{ ansible_user_id }}"
+    group: "{{ansible_user_gid | default(ansible_user_id) }}"
+- name: Extract Rose Pine Archive
+  unarchive:
+    src: "/tmp/gtk3.tar.gz"
+    dest: "/tmp/rose-pine-gtk"
+- name: Copy Rose Pine GTK Themes to theme directory
+  command: cp -a /tmp/rose-pine-gtk/gtk3/. "{{ ansible_env.HOME }}/.themes/"
+- name: Cleanup temp files
+  file:
+    path: "/tmp/rose-pine-gtk"
+    state: absent
+    force: true
