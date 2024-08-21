@@ -9,6 +9,10 @@
       enabled=1
       gpgcheck=1
       gpgkey=https://packages.microsoft.com/keys/microsoft.asc
+- name: Add Docker repository
+  command: dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+  args:
+    creates: /etc/yum.repos.d/docker-ce.repo
 - name: Install DNF packages
   become: true
   ansible.builtin.dnf:
@@ -30,6 +34,11 @@
       - pkgconfig
       - zsh
       - microsoft-edge-stable
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
       # - power-profiles-daemon Install sepearte step/flag for laptop
     state: latest
 - name: "Add rpmfustion repo gpg keys"
