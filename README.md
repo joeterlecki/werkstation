@@ -53,5 +53,4 @@ packer build .
 - Configure Neovim with lsps, themes, and tweaks
 - Configure lightdm login wallpaper
 - Install/Configure Tmux with vim bindings and theme
-- Intsall Obsidian, slack
 - More will come
