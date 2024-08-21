@@ -237,6 +237,8 @@ bar {
 default_border pixel 2
 default_floating_border pixel 0
 
+bindsym $mod+Shift+period exec i3lock --color=#191724
+
 set $ws1 1
 set $ws2 2
 set $ws3 3

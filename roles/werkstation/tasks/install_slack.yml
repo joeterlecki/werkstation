@@ -1,0 +1,8 @@
+- name: Download Slack RPM
+  get_url:
+    url: https://downloads.slack-edge.com/desktop-releases/linux/x64/4.39.95/slack-4.39.95-0.1.el8.x86_64.rpm
+    dest: /tmp/slack.rpm
+- name: Install Slack RPM
+  dnf:
+    name: /tmp/slack.rpm
+    state: present
