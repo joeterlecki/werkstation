@@ -6,3 +6,8 @@
   dnf:
     name: /tmp/slack.rpm
     state: present
+- name: Cleanup temp files
+  file:
+    path: "/tmp/slack.rpm"
+    state: absent
+    force: true
