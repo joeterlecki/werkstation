@@ -50,7 +50,6 @@ packer build .
 ```
 
 # TODO
-- Configure Neovim with lsps, themes, and tweaks
+- Configure Neovim with lsps,tree-sitter, and tweaks
 - Configure lightdm login wallpaper
-- Install/Configure Tmux with vim bindings and theme
-- More will come
+- Configure Tmux with vim bindings and theme
