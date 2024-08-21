@@ -1,0 +1,29 @@
+- name: Ensure snapd is installed
+  become: true
+  dnf:
+    name: snapd
+    state: latest
+    update_cache: yes
+- name: Enable and start snapd service
+  become: true
+  systemd:
+    name: snapd
+    enabled: yes
+    state: started
+- name: Ensure classic snap support is enabled
+  become: true
+  command: ln -s /var/lib/snapd/snap /snap
+  args:
+    creates: /snap
+- name: Install Obsidian snap package
+  become: true
+  snap:
+    classic: true
+    name: obsidian
+    state: present
+- name: Install Todoist snap package
+  become: true
+  snap:
+    classic: true
+    name: todoist
+    state: present
