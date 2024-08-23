@@ -1,8 +1,7 @@
----
 - name: Check if NVM is installed
   become: false
   shell: |
-    source {{ ansible_env.HOME }}/.config/nvm/nvm.sh && nvm --version
+    source {{ ansible_env.HOME }}/.nvm/nvm.sh && nvm --version
   args:
     executable: /bin/bash
   register: nvm_check
@@ -11,8 +10,9 @@
   become: false
   ansible.builtin.shell: >
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | bash
+
   args:
-    creates: "{{ ansible_env.HOME }}/.config/nvm/nvm.sh"
+    creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
   when: nvm_check.rc != 0
 - name: Install Latest Node NVM
   become: false
