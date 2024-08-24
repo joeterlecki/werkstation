@@ -35,6 +35,8 @@
       - containerd.io
       - docker-buildx-plugin
       - docker-compose-plugin
+      - obs-studio
+      - vlc
       # - power-profiles-daemon Install sepearte step/flag for laptop
     state: latest
 - name: "Add rpmfustion repo gpg keys"
