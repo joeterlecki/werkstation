@@ -8,6 +8,7 @@ log_info "Checking for previous installation..."
 if command -v go &> /dev/null; then
     log_warn "Current Go version: $(go version)"
     log_warn "Please use native Go updates via go install"
+    exit 0
 else
     log_info "Calculating latest GO version..."
     LATEST_VERSION=$(curl -s https://go.dev/dl/?mode=json | grep -o 'go[0-9\.]*' | head -n 1)
