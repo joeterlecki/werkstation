@@ -1,53 +1,51 @@
 #!/usr/bin/env bash
-
 set -e
 
-# shellcheck disable=SC2128
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE}[0]")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/utils/log.sh"
 
-if ! command -v apt-get >/dev/null; then
-    log_error "This script only supports Ubuntu/Debian based systems"
-    exit 1
-fi
+check_environment() {
+    if ! command -v apt-get >/dev/null; then
+        log_error "This script only supports Ubuntu/Debian based systems"
+        exit 1
+    fi
 
-if grep -qi microsoft /proc/version; then
-    export IS_WSL=1
-    log_info "WSL environment detected"
-else
-    export IS_WSL=0
-    log_info "Native Linux environment detected"
-fi
+    if grep -qi microsoft /proc/version; then
+        export IS_WSL=1
+        log_info "WSL environment detected"
+    else
+        export IS_WSL=0
+        log_info "Native Linux environment detected"
+    fi
 
-arch=$(uname -m)
-case $arch in
-x86_64)
-    export ARCH="amd64"
-    ;;
-aarch64 | arm64)
-    export ARCH="arm64"
-    ;;
-*)
-    log_error "Architecture not supported: $arch"
-    exit 1
-    ;;
-esac
-log_info "Detected architecture: $ARCH"
+    arch=$(uname -m)
+    case $arch in
+        x86_64)
+            export ARCH="amd64"
+            ;;
+        aarch64 | arm64)
+            export ARCH="arm64"
+            ;;
+        *)
+            log_error "Architecture not supported: $arch"
+            exit 1
+            ;;
+    esac
+    log_info "Detected architecture: $ARCH"
+}
 
-log_warn "Retrieving SUDO password for elevated actions"
-sudo -v
+update_system() {
+    log_section "Running system updates"
+    log_info "Updating package lists..."
+    sudo apt-get update
 
-log_section "Running system updates"
+    log_info "Upgrading packages..."
+    sudo apt-get upgrade -y
 
-log_info "Updating package lists..."
-sudo apt-get update
-
-log_info "Upgrading packages..."
-sudo apt-get upgrade -y
-
-log_info "Cleaning up apt caches..."
-sudo apt-get autoremove -y
-sudo apt-get autoclean
+    log_info "Cleaning up apt caches..."
+    sudo apt-get autoremove -y
+    sudo apt-get autoclean
+}
 
 execute() {
     local dir=$1
@@ -56,27 +54,37 @@ execute() {
         return 1
     fi
 
-    log_info "Processing directory: $dir"
-    find "$dir" -type f -name "*.sh" | sort | while read script; do
+    log_section "Processing directory: $SCRIPT_DIR/$(basename "$dir")"
+    
+    while IFS= read -r script; do
         if [[ -f "$script" && "$script" != "${SCRIPT_DIR}/install.sh" ]]; then
-            log_section "Executing installation scripts: $(basename "$script")"
-            bash "$script"
-            if [ $? -ne 0 ]; then
+            log_info "Executing: $(basename "$script")"
+            if ! bash "$script"; then
                 log_error "Failed to execute script: $script"
-                exit 1
+                return 1
             fi
         fi
-    done
+    done < <(find "$dir" -type f -name "*.sh" | sort)
 }
 
-export IS_WSL
-export ARCH
-export SCRIPT_DIR
-export -f log_info log_warn log_error log_section
-export RED GREEN YELLOW BLUE PURPLE NC BOLD
+main() {
+    check_environment
 
-log_section "Starting Installation"
-execute "$SCRIPT_DIR/base"
-execute "$SCRIPT_DIR/dev"
+    log_warn "Retrieving SUDO password for elevated actions"
+    sudo -v
 
-log_section "Installation script complete"
+    update_system
+
+    export IS_WSL
+    export ARCH
+    export SCRIPT_DIR
+    export -f log_info log_warn log_error log_section
+    export RED GREEN YELLOW BLUE PURPLE NC BOLD
+
+    log_section "Starting Installation"
+    execute "$SCRIPT_DIR/base"
+    execute "$SCRIPT_DIR/dev"
+    log_section "Installation script complete"
+}
+
+main
