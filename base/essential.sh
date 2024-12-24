@@ -14,6 +14,8 @@ sudo apt-get install -y \
     software-properties-common \
     apt-transport-https \
     ca-certificates \
-    gnupg
+    gnupg \
+    jq \
+    fuse
 
 log_info "Essential packages installation completed"

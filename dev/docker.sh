@@ -4,7 +4,7 @@ source "$(dirname "$0")/../utils/log.sh"
 
 log_section "Docker"
 
-if command -v docker &> /dev/null; then
+if command -v docker &>/dev/null; then
     log_warn "Previous Docker installation found..."
     log_warn "Skipping installation"
     exit 0

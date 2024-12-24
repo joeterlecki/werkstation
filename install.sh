@@ -6,7 +6,7 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE}[0]")" && pwd)"
 source "${SCRIPT_DIR}/utils/log.sh"
 
-if ! command -v apt-get > /dev/null; then
+if ! command -v apt-get >/dev/null; then
     log_error "This script only supports Ubuntu/Debian based systems"
     exit 1
 fi
@@ -21,16 +21,16 @@ fi
 
 arch=$(uname -m)
 case $arch in
-    x86_64)
-        export ARCH="amd64"
-        ;;
-    aarch64|arm64)
-        export ARCH="arm64"
-        ;;
-    *)
-        log_error "Architecture not supported: $arch"
-        exit 1
-        ;;
+x86_64)
+    export ARCH="amd64"
+    ;;
+aarch64 | arm64)
+    export ARCH="arm64"
+    ;;
+*)
+    log_error "Architecture not supported: $arch"
+    exit 1
+    ;;
 esac
 log_info "Detected architecture: $ARCH"
 
@@ -57,8 +57,8 @@ execute() {
     fi
 
     log_info "Processing directory: $dir"
-    find "$dir" -type f -name  "*.sh" | sort | while read script; do
-        if [[ -f "$script" &&  "$script" != "${SCRIPT_DIR}/install.sh" ]]; then
+    find "$dir" -type f -name "*.sh" | sort | while read script; do
+        if [[ -f "$script" && "$script" != "${SCRIPT_DIR}/install.sh" ]]; then
             log_section "Executing installation scripts: $(basename "$script")"
             bash "$script"
             if [ $? -ne 0 ]; then
@@ -66,7 +66,7 @@ execute() {
                 exit 1
             fi
         fi
-        done
+    done
 }
 
 export IS_WSL
@@ -78,3 +78,5 @@ export RED GREEN YELLOW BLUE PURPLE NC BOLD
 log_section "Starting Installation"
 execute "$SCRIPT_DIR/base"
 execute "$SCRIPT_DIR/dev"
+
+log_section "Installation script complete"
