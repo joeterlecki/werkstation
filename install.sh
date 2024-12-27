@@ -79,7 +79,7 @@ main() {
     export ARCH
     export SCRIPT_DIR
     export -f log_info log_warn log_error log_section
-    export RED GREEN YELLOW BLUE PURPLE NC BOLD
+    export RED GREEN YELLOW PURPLE NC
 
     log_section "Starting Installation"
     execute "$SCRIPT_DIR/base"
