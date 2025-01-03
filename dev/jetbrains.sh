@@ -38,6 +38,29 @@ configure_environment() {
     else
         log_info "Wayland runtime configuration already in .bashrc"
     fi
+
+    if ! grep -q "$JETBRAINS_PATH" ~/.zshrc; then
+        echo "$JETBRAINS_PATH" >>~/.zshrc
+        log_info "Added Toolbox scripts PATH to .zshrc"
+    else
+        log_info "Toolbox scripts PATH already in .zshrc"
+    fi
+
+    if [[ $IS_WSL -eq 1 ]] && [[ $(uname -m) == "aarch64" ]]; then
+        if ! grep -q "$SKIKO_CONFIG" ~/.bashrc; then
+            echo "$SKIKO_CONFIG" >>~/.bashrc
+            log_info "Added SKIKO render configuration to .bashrc for WSL ARM"
+        else
+            log_info "SKIKO render configuration already in .zshrc"
+        fi
+    fi
+
+    if ! grep -q '/mnt/wslg/runtime-dir/wayland-\* \$XDG_RUNTIME_DIR' ~/.zshrc; then
+        echo "$WAYLAND_RUNTIME" >>~/.zshrc
+        log_info "Added Wayland runtime configuration to .zshrc"
+    else
+        log_info "Wayland runtime configuration already in .zshrc"
+    fi
 }
 
 if [ -L "$BINARY_LINK" ] || [ -d "$TOOLBOX_DIR" ] || pgrep -f "jetbrains-toolbox" &>/dev/null; then

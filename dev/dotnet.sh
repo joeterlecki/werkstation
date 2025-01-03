@@ -24,4 +24,12 @@ else
     log_info "Dotnet PATH already in .bashrc"
 fi
 
+log_info "Adding Dotnet Tools to Zsh Path..."
+if ! grep -q "$DOTNET_PATH" ~/.zshrc; then
+    echo "$DOTNET_PATH" >>~/.zshrc
+    log_info "Added Dotnet PATH to .zshrc"
+else
+    log_info "Dotnet PATH already in .zshrc"
+fi
+
 log_info "Dotnet installation complete"

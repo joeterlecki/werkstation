@@ -106,12 +106,9 @@ else
     log_warn "zsh-syntax-highlighting is already installed"
 fi
 
-if grep -q '^plugins=' "$HOME/.zshrc"; then
-    log_info "Updating plugins list..."
-    sed -i 's/^plugins=(/plugins=(zsh-autosuggestions zsh-syntax-highlighting /' "$HOME/.zshrc"
-else
-    log_info "Adding plugins configuration..."
-    echo 'plugins=(zsh-autosuggestions zsh-syntax-highlighting)' >>"$HOME/.zshrc"
+if ! grep -q "zsh-autosuggestions" "$HOME/.zshrc" || ! grep -q "zsh-syntax-highlighting" "$HOME/.zshrc" || ! grep -q "git" "$HOME/.zshrc"; then
+    log_info "Adding missing plugins..."
+    sed -i 's/^plugins=.*/plugins=(zsh-autosuggestions zsh-syntax-highlighting git)/' "$HOME/.zshrc"
 fi
 
 log_info "ZSH, Oh My Zsh, and Powerlevel10k setup complete"

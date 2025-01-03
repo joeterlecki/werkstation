@@ -17,9 +17,16 @@ check_go_path() {
     else
         log_info "Go PATH already in .bashrc"
     fi
+
+    if ! grep -q "$GO_PATH" ~/.zshrc; then
+        echo "$GO_PATH" >>~/.zshrc
+        log_info "Added Go PATH to .zshrc"
+    else
+        log_info "Go PATH already in .zshrc"
+    fi
 }
 
-if command -v go &> /dev/null; then
+if command -v go &>/dev/null; then
     log_warn "Current Go version: $(go version)"
     log_warn "Please use native Go updates via go install"
     check_go_path
