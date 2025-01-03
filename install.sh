@@ -20,16 +20,16 @@ check_environment() {
 
     arch=$(uname -m)
     case $arch in
-        x86_64)
-            export ARCH="amd64"
-            ;;
-        aarch64 | arm64)
-            export ARCH="arm64"
-            ;;
-        *)
-            log_error "Architecture not supported: $arch"
-            exit 1
-            ;;
+    x86_64)
+        export ARCH="amd64"
+        ;;
+    aarch64 | arm64)
+        export ARCH="arm64"
+        ;;
+    *)
+        log_error "Architecture not supported: $arch"
+        exit 1
+        ;;
     esac
     log_info "Detected architecture: $ARCH"
 }
@@ -55,10 +55,9 @@ execute() {
     fi
 
     log_section "Processing directory: $SCRIPT_DIR/$(basename "$dir")"
-    
+
     while IFS= read -r script; do
         if [[ -f "$script" && "$script" != "${SCRIPT_DIR}/install.sh" ]]; then
-            log_info "Executing: $(basename "$script")"
             if ! bash "$script"; then
                 log_error "Failed to execute script: $script"
                 return 1
@@ -84,6 +83,7 @@ main() {
     log_section "Starting Installation"
     execute "$SCRIPT_DIR/base"
     execute "$SCRIPT_DIR/dev"
+    execute "$SCRIPT_DIR/neovim"
     log_section "Installation script complete"
 }
 
