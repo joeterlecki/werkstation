@@ -72,7 +72,7 @@ fi
 
 if [ -f "$(dirname "$0")/p10k.zsh" ]; then
     log_info "Copying p10k configuration file..."
-    if cp "$(dirname "$0")/p10k.zsh" "$HOME/.p10k.zsh"; then
+    if cp "$(dirname "$0")/dotfiles/p10k.zsh" "$HOME/.p10k.zsh"; then
         log_info "p10k.zsh configuration copied successfully"
     else
         log_error "Failed to copy p10k.zsh configuration"
