@@ -15,6 +15,7 @@ PACKAGES=(
     gnupg
     jq
     fuse
+    stow
 )
 
 log_info "Installing common tools..."

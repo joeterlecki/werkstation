@@ -1,14 +1,29 @@
 #!/usr/bin/env bash
+source "$(dirname "${0}")/../utils/log.sh"
 
-source "$(dirname "$0")/../utils/log.sh"
+log_section "AstroNvim"
 
-log_section "NVIM: AstroNVIM"
+NVIM_CONFIG_PATH="$HOME/.config/nvim"
+ASTRONVIM_TEMPLATE="https://github.com/AstroNvim/template"
 
-if command -v nvim &>/dev/null; then
-    log_warn "Neovim installation found..."
+# Check if Neovim is installed
+if ! command -v nvim &>/dev/null; then
+    log_info "Neovim not found. Installing via apt..."
+    sudo apt-get update
+    sudo apt-get install neovim -y
+    log_info "Neovim installation complete"
+fi
+
+# Check if existing nvim config exists
+if [ -d "$NVIM_CONFIG_PATH" ]; then
+    log_warn "Neovim configuration already exists. Skipping installation..."
     exit 0
 fi
 
-sudo apt-get install neovim -y
+log_info "Cloning AstroNvim template..."
+git clone --depth 1 "$ASTRONVIM_TEMPLATE" "$NVIM_CONFIG_PATH"
 
-log_info "Neovim installation complete"
+log_info "Removing git repository..."
+rm -rf "$NVIM_CONFIG_PATH/.git"
+
+log_info "Neovim and AstroNVIM installation complete..."
