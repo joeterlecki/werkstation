@@ -3,15 +3,12 @@ source "$(dirname "$0")/../utils/log.sh"
 
 log_section "Node Version Manager"
 
-# export NVM_DIR="$HOME/.nvm"
-# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-
 LATEST_VERSION=$(curl -s https://api.github.com/repos/nvm-sh/nvm/releases/latest | grep '"tag_name":' | cut -d'"' -f4)
 INSTALL_URL="https://raw.githubusercontent.com/nvm-sh/nvm/${LATEST_VERSION}/install.sh"
 
 configure_nvm() {
     if ! grep -q 'export NVM_DIR="$HOME/.nvm"' ~/.bashrc; then
-        cat << 'EOF' >> ~/.bashrc
+        cat <<'EOF' >>~/.bashrc
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
@@ -36,7 +33,7 @@ if command -v nvm &>/dev/null; then
         log_warn "Already running the latest version of Node Version Manager"
         exit 0
     fi
-    
+
     log_warn "Previous Node Version Manager installation found"
     curl -o- "$INSTALL_URL" | bash
 else

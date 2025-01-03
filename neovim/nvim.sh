@@ -6,7 +6,6 @@ log_section "AstroNvim"
 NVIM_CONFIG_PATH="$HOME/.config/nvim"
 ASTRONVIM_TEMPLATE="https://github.com/AstroNvim/template"
 
-# Check if Neovim is installed
 if ! command -v nvim &>/dev/null; then
     log_info "Neovim not found. Installing via apt..."
     sudo apt-get update
@@ -14,7 +13,6 @@ if ! command -v nvim &>/dev/null; then
     log_info "Neovim installation complete"
 fi
 
-# Check if existing nvim config exists
 if [ -d "$NVIM_CONFIG_PATH" ]; then
     log_warn "Neovim configuration already exists. Skipping installation..."
     exit 0
