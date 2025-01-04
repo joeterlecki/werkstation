@@ -6,7 +6,7 @@ source "${SCRIPT_DIR}/utils/log.sh"
 
 check_environment() {
     if ! command -v apt-get >/dev/null; then
-        log_error "This script only supports Ubuntu/Debian based systems"
+        log_error "This script only supports Fedora based systems"
         exit 1
     fi
 
@@ -34,6 +34,7 @@ check_environment() {
     log_info "Detected architecture: $ARCH"
 }
 
+# TODO CONVERT TO FEDORA
 update_system() {
     log_section "Running system updates"
     log_info "Updating package lists..."
