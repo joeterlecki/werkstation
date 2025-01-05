@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-source "$(dirname "$0")/../utils/log.sh"
+source "${SCRIPT_DIR}/utils/log.sh"
+
 TEMP_DIR=$(mktemp -d)
 if [[ ! "$TEMP_DIR" || ! -d "$TEMP_DIR" ]]; then
     log_error "Failed to create temporary directory"

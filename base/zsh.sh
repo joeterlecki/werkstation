@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-source "$(dirname "$0")/../utils/log.sh"
+source "${SCRIPT_DIR}/utils/log.sh"
 
 log_section "ZSH Shell Configuration"
 

@@ -19,6 +19,7 @@ check_environment() {
 	fi
 
 	arch=$(uname -m)
+
 	case $arch in
 	x86_64)
 		export ARCH="amd64"

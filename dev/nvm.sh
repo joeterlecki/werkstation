@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-source "$(dirname "$0")/../utils/log.sh"
+source "${SCRIPT_DIR}/utils/log.sh"
 log_section "Node Version Manager"
 
 LATEST_VERSION=$(curl -s https://api.github.com/repos/nvm-sh/nvm/releases/latest | grep '"tag_name":' | cut -d'"' -f4)

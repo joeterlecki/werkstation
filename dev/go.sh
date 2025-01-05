@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-source "$(dirname "$0")/../utils/log.sh"
+source "${SCRIPT_DIR}/utils/log.sh"
 
 log_section "Golang"
-GO_PATH='export PATH="$PATH:/usr/local/go/bin"'
+GO_PATH="export PATH='$PATH:/usr/local/go/bin'"
 
 check_go_path() {
     if [[ ":$PATH:" != *":/usr/local/go/bin:"* ]]; then
