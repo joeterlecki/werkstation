@@ -17,6 +17,7 @@ PACKAGES=(
 	fuse
 	fuse-devel
 	stow
+	ripgrep
 	dnf-plugins-core
 )
 
