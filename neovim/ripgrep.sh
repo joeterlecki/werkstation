@@ -10,6 +10,6 @@ if command -v rg &>/dev/null; then
 fi
 
 log_info "Installing Ripgrep..."
-sudo apt-get install ripgrep -y
+sudo zypper -n install ripgrep
 
 log_info "Ripgrep installation complete"
