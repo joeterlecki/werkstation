@@ -1,25 +1,22 @@
 #!/usr/bin/env bash
 source "${SCRIPT_DIR}/utils/log.sh"
-
 log_section "Dotnet"
 
-DOTNET_PATH='export PATH=$PATH:$HOME/.dotnet/tools'
+DOTNET_PATH='export PATH="$PATH:$HOME/.dotnet/tools"'
 
 log_info "Installing latest dotnet sdks..."
 sudo dnf install dotnet-sdk-9.0 -y
 
-log_info "Adding Dotnet Tools to Path..."
-if ! grep -q "$DOTNET_PATH" ~/.bashrc; then
-    echo "$DOTNET_PATH" >>~/.bashrc
-    log_info "Added Dotnet PATH to .bashrc"
+if ! grep -q "PATH=\"\$PATH:\$HOME/.dotnet/tools\"" "$HOME/.bashrc"; then
+    log_info "Adding Dotnet Tools to Path in bashrc..."
+    echo "$DOTNET_PATH" >> "$HOME/.bashrc"
 else
     log_info "Dotnet PATH already in .bashrc"
 fi
 
-log_info "Adding Dotnet Tools to Zsh Path..."
-if ! grep -q "$DOTNET_PATH" ~/.zshrc; then
-    echo "$DOTNET_PATH" >>~/.zshrc
-    log_info "Added Dotnet PATH to .zshrc"
+if ! grep -q "PATH=\"\$PATH:\$HOME/.dotnet/tools\"" "$HOME/.zshrc"; then
+    log_info "Adding Dotnet Tools to Path in zshrc..."
+    echo "$DOTNET_PATH" >> "$HOME/.zshrc"
 else
     log_info "Dotnet PATH already in .zshrc"
 fi
