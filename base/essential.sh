@@ -15,6 +15,7 @@ PACKAGES=(
 	gnupg
 	jq
 	fuse
+	fuse-devel
 	stow
 	dnf-plugins-core
 )
