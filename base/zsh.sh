@@ -11,8 +11,7 @@ fi
 
 if ! command -v zsh &>/dev/null || ! $is_current_shell_zsh; then
     log_info "Installing ZSH..."
-    sudo apt-get update
-    sudo apt-get install -y zsh
+    sudo zypper -n install zsh
     zsh_path=$(command -v zsh)
     if ! $is_current_shell_zsh; then
         log_info "Setting ZSH as default shell..."
