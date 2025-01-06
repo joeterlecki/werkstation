@@ -8,8 +8,8 @@ PACKAGES=(
 	wget
 	git
 	unzip
-	build-essential
-	software-properties-common
+	#build-essential
+	#software-properties-common
 	apt-transport-https
 	ca-certificates
 	gnupg
@@ -19,6 +19,10 @@ PACKAGES=(
 )
 
 log_info "Installing common tools..."
-sudo apt-get install -y "${PACKAGES[@]}"
+sudo dnf install -y "${PACKAGES[@]}"
+
+log_info "Installing group tools and packages"
+sudo dnf group install -y development-tools
 
 log_info "Essential packages installation completed"
+

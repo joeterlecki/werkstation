@@ -5,7 +5,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/utils/log.sh"
 
 check_environment() {
-	if ! command -v apt-get >/dev/null; then
+	if ! command -v dnf >/dev/null; then
 		log_error "This script only supports Fedora based systems"
 		exit 1
 	fi
@@ -37,15 +37,7 @@ check_environment() {
 
 update_system() {
 	log_section "Running system updates"
-	log_info "Updating package lists..."
-	sudo apt-get update
-
-	log_info "Upgrading packages..."
-	sudo apt-get upgrade -y
-
-	log_info "Cleaning up apt caches..."
-	sudo apt-get autoremove -y
-	sudo apt-get autoclean
+	sudo dnf update -y
 }
 
 execute() {
@@ -83,8 +75,8 @@ main() {
 
 	log_section "Starting Installation"
 	execute "$SCRIPT_DIR/base"
-	execute "$SCRIPT_DIR/dev"
-	execute "$SCRIPT_DIR/neovim"
+	#execute "$SCRIPT_DIR/dev"
+	#execute "$SCRIPT_DIR/neovim"
 	log_section "Installation script complete"
 }
 
