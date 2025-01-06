@@ -5,16 +5,8 @@ log_section "Dotnet"
 
 DOTNET_PATH='export PATH=$PATH:$HOME/.dotnet/tools'
 
-if command -v dotnet &>/dev/null; then
-    log_warn "Previous Dotnet SDK installation found..."
-    exit 0
-fi
-
-log_info "Updating APT sources..."
-sudo apt-get update
-
-log_info "Installing Dotnet SDK via APT..."
-sudo apt-get install -y dotnet-sdk-8.0
+log_info "Installing latest dotnet sdks..."
+sudo dnf install dotnet-sdk-9.0 -y
 
 log_info "Adding Dotnet Tools to Path..."
 if ! grep -q "$DOTNET_PATH" ~/.bashrc; then

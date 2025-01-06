@@ -3,28 +3,34 @@ source "${SCRIPT_DIR}/utils/log.sh"
 
 log_section "Docker"
 
-if command -v docker &>/dev/null; then
-    log_warn "Previous Docker installation found..."
-    exit 0
-fi
-
 TEMP_DIR=$(mktemp -d)
-if [[ ! "$TEMP_DIR" || ! -d "$TEMP_DIR" ]]; then
-    log_error "Failed to create temporary directory"
-    exit 1
-fi
 
 log_info "Removing old docker installations if present..."
-for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do 
-    sudo apt-get remove -y $pkg
-done
+sudo dnf remove docker \
+                  docker-client \
+                  docker-client-latest \
+                  docker-common \
+                  docker-latest \
+                  docker-latest-logrotate \
+                  docker-logrotate \
+                  docker-selinux \
+                  docker-engine-selinux \
+                  docker-engine
 
-curl -fsSL https://get.docker.com -o "${TEMP_DIR}/get-docker.sh"
-sudo sh "${TEMP_DIR}/get-docker.sh"
 
+log_info "Adding docker repo..."
+sudo dnf-3 config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+
+log_info "Installing docker engine and tools..."
+
+sudo dnf install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
 log_info "Enabling and starting Docker..."
+
 sudo systemctl enable docker
 sudo systemctl start docker
+
+log_info "Adding user to docker group..."
+sudo usermod -aG docker $USER
 
 sudo rm -rf /tmp/tmp.*
 log_info "Docker installation complete"

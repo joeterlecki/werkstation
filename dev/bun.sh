@@ -3,14 +3,9 @@ source "${SCRIPT_DIR}/utils/log.sh"
 
 log_section "Bun"
 
-# Define Bun's path addition correctly
 BUN_PATH='export BUN_INSTALL="$HOME/.bun"'
 BUN_BIN_PATH='export PATH="$BUN_INSTALL/bin:$PATH"'
 
-if command -v bun &>/dev/null; then
-    log_warn "Previous Bun installation found..."
-    exit 0
-fi
 
 log_info "Installing Bun..."
 curl -fsSL https://bun.sh/install | bash

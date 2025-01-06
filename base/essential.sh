@@ -16,6 +16,7 @@ PACKAGES=(
 	jq
 	fuse
 	stow
+	dnf-plugins-core
 )
 
 log_info "Installing common tools..."
