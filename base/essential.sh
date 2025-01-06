@@ -27,5 +27,12 @@ sudo dnf install -y "${PACKAGES[@]}"
 log_info "Installing group tools and packages"
 sudo dnf group install -y development-tools
 
-log_info "Essential packages installation completed"
 
+REMOVE_PACKAGES=(
+	dnfdragora-updater
+)
+
+log_info "Uninstalling unwanted packages..."
+sudo dnf remove -y "${REMOVE_PACKAGES[@]}"
+
+log_info "Essential packages installation completed"
