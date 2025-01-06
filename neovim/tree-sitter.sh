@@ -4,8 +4,6 @@ source "${SCRIPT_DIR}/utils/log.sh"
 
 log_section "Tree-sitter CLI"
 
-. "$NVM_DIR/nvm.sh"
-
 if command -v tree-sitter &>/dev/null; then
     log_warn "Previous Tree-sitter installation found..."
     exit 0

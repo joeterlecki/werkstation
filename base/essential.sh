@@ -8,9 +8,9 @@ PACKAGES=(
 	wget
 	git
 	unzip
-	#build-essential
-	#software-properties-common
-	#apt-transport-https
+	build-essential
+	software-properties-common
+	apt-transport-https
 	ca-certificates
 	gnupg
 	jq
@@ -19,6 +19,6 @@ PACKAGES=(
 )
 
 log_info "Installing common tools..."
-sudo zypper -n install "${PACKAGES[@]}"
+sudo apt-get install -y "${PACKAGES[@]}"
 
 log_info "Essential packages installation completed"

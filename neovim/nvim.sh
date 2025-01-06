@@ -8,7 +8,8 @@ ASTRONVIM_TEMPLATE="https://github.com/AstroNvim/template"
 
 if ! command -v nvim &>/dev/null; then
     log_info "Neovim not found. Installing via apt..."
-    sudo zypper -n install neovim
+    sudo apt-get update
+    sudo apt-get install neovim -y
     log_info "Neovim installation complete"
 fi
 

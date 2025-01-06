@@ -43,9 +43,7 @@ else
 fi
 
 log_info "Sourcing NVM..."
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+source ~/.nvm/nvm.sh &>/dev/null
 
 # Get the latest LTS version number
 LATEST_LTS=$(nvm version-remote --lts)
