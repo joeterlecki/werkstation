@@ -80,7 +80,8 @@ main() {
 	# execute "$SCRIPT_DIR/system"
 	# execute "$SCRIPT_DIR/wm"
 	# execute "$SCRIPT_DIR/apps"
-	execute "$SCRIPT_DIR"/ssh
+	# execute "$SCRIPT_DIR"/ssh
+	execute "$SCRIPT_DIR"/gitconfig
 	log_section "Installation script complete"
 }
 
