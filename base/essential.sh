@@ -28,9 +28,9 @@ sudo dnf install -y "${PACKAGES[@]}"
 log_info "Installing group tools and packages"
 sudo dnf group install -y development-tools
 
-
 REMOVE_PACKAGES=(
 	dnfdragora-updater
+	firefox
 )
 
 log_info "Uninstalling unwanted packages..."

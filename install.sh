@@ -77,8 +77,8 @@ main() {
 	#execute "$SCRIPT_DIR/base"
 	#execute "$SCRIPT_DIR/dev"
 	#execute "$SCRIPT_DIR/neovim"
-	execute "$SCRIPT_DIR/system"
-	execute "$SCRIPT_DIR/wm"
+	# execute "$SCRIPT_DIR/system"
+	# execute "$SCRIPT_DIR/wm"
 	execute "$SCRIPT_DIR/apps"
 	log_section "Installation script complete"
 }
