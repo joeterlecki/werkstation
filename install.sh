@@ -79,7 +79,8 @@ main() {
 	#execute "$SCRIPT_DIR/neovim"
 	# execute "$SCRIPT_DIR/system"
 	# execute "$SCRIPT_DIR/wm"
-	execute "$SCRIPT_DIR/apps"
+	# execute "$SCRIPT_DIR/apps"
+	execute "$SCRIPT_DIR"/ssh
 	log_section "Installation script complete"
 }
 
