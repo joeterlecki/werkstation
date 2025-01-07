@@ -19,6 +19,7 @@ PACKAGES=(
 	stow
 	ripgrep
 	dnf-plugins-core
+	nvim
 )
 
 log_info "Installing common tools..."
