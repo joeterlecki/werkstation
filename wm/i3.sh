@@ -3,6 +3,6 @@ source "${SCRIPT_DIR}/utils/log.sh"
 log_section "Window Manager"
 
 log_info "Installing i3 window manager and required packages..."
-sudo dnf install i3 picom feh polybar dunst -y
+sudo dnf install i3 picom feh dunst -y
 
 log_info "Window manager installation complete"
