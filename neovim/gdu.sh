@@ -1,16 +1,27 @@
 #!/usr/bin/env bash
-source "${SCRIPT_DIR}/utils/log.sh"
+source "$(dirname "${0}")/../utils/log.sh"
 
 log_section "GDU Installation"
+
+log_info "Detecting latest GDU version..."
+LATEST_VERSION=$(curl -s https://api.github.com/repos/dundee/gdu/releases/latest |
+    grep '"tag_name":' |
+    sed -E 's/.*"([^"]+)".*/\1/' |
+    sed 's/^v//')
+if [ -z "$LATEST_VERSION" ]; then
+    log_error "Failed to detect latest version"
+    exit 1
+fi
+log_info "Latest version: ${LATEST_VERSION}"
 
 TEMP_DIR=$(mktemp -d)
 trap 'rm -rf "$TEMP_DIR"' EXIT
 
-DOWNLOAD_URL="https://github.com/dundee/gdu/releases/latest/download/gdu_linux_amd64.tgz"
+DOWNLOAD_URL="https://github.com/dundee/gdu/releases/latest/download/gdu_linux_${ARCH}.tgz"
 
 log_info "Working in temporary directory: $TEMP_DIR"
 
-log_info "Downloading latest GDU release..."
+log_info "Downloading latest GDU release for $ARCH..."
 curl -L "$DOWNLOAD_URL" -o "$TEMP_DIR/gdu.tgz"
 
 log_info "Extracting GDU..."

@@ -77,12 +77,9 @@ main() {
 	export RED GREEN YELLOW PURPLE NC
 
 	log_section "Starting Installation"
-	execute "$SCRIPT_DIR/base"
-	execute "$SCRIPT_DIR/dev"
-	# execute "$SCRIPT_DIR/neovim"
-	# execute "$SCRIPT_DIR/system"
-	# execute "$SCRIPT_DIR/wm"
-	# execute "$SCRIPT_DIR/apps"
+	# execute "$SCRIPT_DIR/base"
+	# execute "$SCRIPT_DIR/dev"
+	execute "$SCRIPT_DIR/neovim"
 	# execute "$SCRIPT_DIR"/ssh
 	# execute "$SCRIPT_DIR"/gitconfig
 	log_section "Installation script complete"

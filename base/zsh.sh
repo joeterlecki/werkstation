@@ -4,7 +4,7 @@ source "${SCRIPT_DIR}/utils/log.sh"
 log_section "ZSH Shell Configuration"
 
 log_info "Installing ZSH..."
-sudo dnf install -y zsh
+sudo apt-get install zsh -y
 zsh_path=$(command -v zsh)
 
 log_info "Setting default shell to zsh"

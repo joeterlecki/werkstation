@@ -15,10 +15,9 @@ PACKAGES=(
 	gnupg
 	jq
 	fuse
-	fuse-devel
 	stow
 	ripgrep
-	nvim
+	neovim
 )
 
 log_info "Installing common tools..."
