@@ -4,6 +4,7 @@ source "${SCRIPT_DIR}/utils/log.sh"
 log_section "Essential Packages"
 
 PACKAGES=(
+	python3-venv
 	curl
 	wget
 	git
@@ -18,6 +19,8 @@ PACKAGES=(
 	stow
 	ripgrep
 	neovim
+	cmake
+	luarocks
 )
 
 log_info "Installing common tools..."
