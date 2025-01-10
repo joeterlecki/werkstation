@@ -18,7 +18,7 @@ wget -q -P "$TEMP_DIR" "$FONT_URL" || {
 }
 
 log_info "Extracting font files..."
-unzip -q "$TEMP_DIR/0xProto.zip" -d "$TEMP_DIR" || {
+unzip -q "$TEMP_DIR/CascadiaCode.zip" -d "$TEMP_DIR" || {
     log_error "Failed to extract font"
     exit 1
 }
