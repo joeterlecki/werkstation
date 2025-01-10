@@ -1,5 +1,0 @@
-- name: Disable SELinux permanently
-  replace:
-    path: /etc/selinux/config
-    regexp: '^SELINUX=.*'
-    replace: 'SELINUX=permissive'
