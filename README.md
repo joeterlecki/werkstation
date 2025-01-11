@@ -13,3 +13,5 @@ How can i set the themes for the icons without lxappearance?
 6. Correct font 0x proto for kitty/neovim, everything else is Mononoki
 7. NVIM config for lsp's, formatter, linters, and tree sitter
 8. OH-my-zsh config with plugins
+9. Wallpapers under ~/.wallpapers
+10. Configure lockscreen background and possibly theme it?

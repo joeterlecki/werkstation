@@ -20,6 +20,7 @@ PACKAGES=(
 	nvim
 	xrandr
 	polkit-devel
+	xsettingsd
 )
 
 log_info "Installing common tools..."
