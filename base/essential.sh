@@ -8,8 +8,6 @@ PACKAGES=(
 	wget
 	git
 	unzip
-	#build-essential
-	#software-properties-common
 	apt-transport-https
 	ca-certificates
 	gnupg
@@ -20,6 +18,8 @@ PACKAGES=(
 	ripgrep
 	dnf-plugins-core
 	nvim
+	xrandr
+	polkit-devel
 )
 
 log_info "Installing common tools..."
