@@ -10,6 +10,6 @@ log_info "Enabling nonfree rpm fusion repos..."
 sudo dnf install -y https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
 
 log_info "Upgrading repos and refresh..."
-sudo dnf upgrade --refresh
+sudo dnf upgrade --refresh -y
 
 log_info "RPM Fusion repo installation complete"
