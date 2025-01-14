@@ -5,7 +5,6 @@ log_section "Jetbrains Toolbox"
 TOOLBOX_DIR="/opt/jetbrains-toolbox"
 BINARY_LINK="/usr/local/bin/jetbrains-toolbox"
 JETBRAINS_PATH='export PATH="$PATH:$HOME/.local/share/JetBrains/Toolbox/scripts"'
-WAYLAND_RUNTIME='ln -sf /mnt/wslg/runtime-dir/wayland-* $XDG_RUNTIME_DIR/'
 
 if [[ ":$PATH:" != *":$HOME/.local/share/JetBrains/Toolbox/scripts:"* ]]; then
 	log_warn "Toolbox scripts not found in current PATH"
