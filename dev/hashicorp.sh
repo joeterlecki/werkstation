@@ -7,6 +7,6 @@ log_info "Adding hashicorop dnf repo..."
 sudo dnf-3 config-manager --add-repo https://rpm.releases.hashicorp.com/fedora/hashicorp.repo
 
 log_info "Installing Hashicorp tools..."
-sudo dnf install -y terraform packer
+sudo dnf install -y terraform packer vagrant
 
 log_info "Hashicorp tools installation complete"
