@@ -12,3 +12,5 @@ How can i set the themes for the icons without lxappearance?
 6. Correct font install 0x proto for kitty/neovim, everything else is Mononoki
 7. NVIM config for lsp's, formatter, linters, and tree sitter
 8. OH-my-zsh config with plugins
+9. replace lightdm with sddm and install catppuccin mocha theme
+10. I tried to replace grub 2.2 memu with catpuccin theme but seems like fedora 41 is wierd with grub menus
