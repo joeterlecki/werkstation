@@ -18,4 +18,9 @@ sudo dnf4 -v group install 'Sound and Video'
 log_info "Installing VLC..."
 sudo dnf install -y vlc
 
+log_info "Installing additional HW Decoding VA-API tools"
+sudo dnf install -y ffmpeg-libs libva libva-utils
+sudo dnf swap -y libva-intel-media-driver intel-media-driver --allowerasing
+sudo dnf install -y libva-intel-driver
+
 log_info "Multimedia and media plugins installation complete"
