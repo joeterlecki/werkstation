@@ -15,3 +15,4 @@ How can i set the themes for the icons without lxappearance?
 9. replace lightdm with sddm and install catppuccin mocha theme
 10. I tried to replace grub 2.2 memu with catpuccin theme but seems like fedora 41 is weird with grub menus
 11. Install davinci resolve and configure conflicted packages, additional codes need added too
+12. grub catpuccin theme menu
