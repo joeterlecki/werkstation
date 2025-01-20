@@ -13,6 +13,12 @@ PACKAGES=(
   thunar
   rofi
   fastfetch
+  light
+  powertop
+  fzf
+  zoxide
+  lsd
+  bat
 )
 
 log_info "Installing i3 window manager and required packages..."
