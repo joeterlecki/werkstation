@@ -16,4 +16,4 @@ sudo fwupdmgr get-updates -y # Fetches list of available updates.
 
 log_warn "Full update requires reboot, NO for now as to not interrupt other scripts.."
 log_info "Running updates..."
-sudo fwupdmgr updates
+sudo fwupdmgr update -y

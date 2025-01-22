@@ -4,7 +4,7 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/utils/log.sh"
 
-check_environment() {
+Mcheck_environment() {
 	if ! command -v dnf >/dev/null; then
 		log_error "This script only supports Fedora based systems"
 		exit 1
@@ -45,12 +45,13 @@ main() {
 
 	log_section "Starting Installation"
 	execute "$SCRIPT_DIR"/base
+	execute "$SCRIPT_DIR"/homebrew
 	execute "$SCRIPT_DIR"/dev
 	execute "$SCRIPT_DIR"/neovim
 	execute "$SCRIPT_DIR"/wm
 	execute "$SCRIPT_DIR"/apps
 	execute "$SCRIPT_DIR"/ssh
-        execute "$SCRIPT_DIR"/system
+    execute "$SCRIPT_DIR"/system
 	log_section "Installation script complete"
 }
 

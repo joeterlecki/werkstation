@@ -11,13 +11,10 @@ PACKAGES=(
 	apt-transport-https
 	ca-certificates
 	gnupg
-	jq
 	fuse
 	fuse-devel
 	stow
-	ripgrep
 	dnf-plugins-core
-	nvim
 	xrandr
 	polkit-devel
 	xsettingsd
