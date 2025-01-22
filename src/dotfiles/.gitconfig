@@ -12,11 +12,49 @@
 [init]
     defaultBranch = main
 [alias]
-    st = status
-    co = checkout
-    br = branch
-    ci = commit
-    lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
+    # Status, branch, and basic info
+    s = status -s                     # Shorter status
+    st = status                       # Full status
+    br = branch                       # List branches
+    bra = branch -a                   # List all branches including remote
+    
+    # Commit related
+    cm = commit -m                    # Commit with message
+    ca = commit --amend              # Amend last commit
+    uncommit = reset HEAD~1           # Undo last commit but keep changes
+    
+    # Checkout and branch management
+    co = checkout                     # Checkout
+    cob = checkout -b                 # Checkout new branch
+    del = branch -D                   # Delete branch
+    
+    # Logging and history
+    lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    last = log -1 HEAD               # Show last commit
+    
+    # Working with changes
+    unstage = reset HEAD --           # Remove files from index
+    dc = diff --cached               # Show staged changes
+    df = diff                        # Show all changes
+    
+    # Remote operations
+    pom = push origin main          # Push to main
+    poh = push origin HEAD          # Push current branch
+    pl = pull                       # Pull
+    
+    # Stash operations
+    sl = stash list                 # List stashes
+    sp = stash pop                  # Pop last stash
+    ss = stash save                 # Save stash with message
+    
+    # Useful combinations
+    done = !git pull && git push    # Pull then push
+    sync = !git fetch origin && git rebase origin/main    # Sync with main
+    
+    # Show aliases
+    alias = config --get-regexp ^alias\\.   # List all aliases
+
+
 [color]
     ui = auto
     branch = auto

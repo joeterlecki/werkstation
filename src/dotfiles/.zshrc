@@ -1,10 +1,3 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 
@@ -15,7 +8,7 @@ export ZSH="$HOME/.oh-my-zsh"
 # load a random theme each time Oh My Zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="powerlevel10k/powerlevel10k"
+ZSH_THEME="robbyrussell"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -77,7 +70,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
+plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -110,32 +103,84 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-# bun completions
-[ -s "/home/jterlecki/.bun/_bun" ] && source "/home/jterlecki/.bun/_bun"
-
-# bun
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
-export PATH="$HOME/.bun/bin:$PATH"
-export PATH="$PATH:$HOME/.dotnet/tools"
-export PATH="$PATH:/usr/local/go/bin"
-export PATH="$PATH:$HOME/.local/share/JetBrains/Toolbox/scripts"
-
+# NVM (Node Version Manager) Configuration
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-export FZF_DEFAULT_OPTS=" \
---color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8 \
---color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc \
---color=marker:#b4befe,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8 \
---color=selected-bg:#45475a \
---multi"
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
-export EDITOR="/usr/bin/nvim"
-# xmodmap -e "clear lock" #disable caps lock switch
-# xmodmap -e "keysym Caps_Lock = Escape" #set caps_lock as escape
+alias ls='lsd'
+alias ll='lsd -l'
+alias la='lsd -a'
+alias lla='lsd -la'
+alias lt='lsd --tree'
 
+alias cat='bat'
+
+# Basic terraform commands
+alias tf='terraform'
+alias tfi='terraform init'
+alias tfp='terraform plan'
+alias tfa='terraform apply'
+alias tfd='terraform destroy'
+alias tfw='terraform workspace'
+alias tfo='terraform output'
+alias tff='terraform fmt'
+alias tfv='terraform validate'
+
+# Plan and apply with auto-approve
+alias tfpa='terraform plan -auto-approve'
+alias tfaa='terraform apply -auto-approve'
+
+# Terraform state manipulation
+alias tfs='terraform state'
+alias tfsl='terraform state list'
+alias tfss='terraform state show'
+alias tfsrm='terraform state rm'
+alias tfsm='terraform state mv'
+
+# Workspace management
+alias tfws='terraform workspace show'
+alias tfwl='terraform workspace list'
+alias tfwn='terraform workspace new'
+alias tfws='terraform workspace select'
+
+# Target specific resources
+alias tfpt='terraform plan -target'
+alias tfat='terraform apply -target'
+
+# Variables and outputs
+alias tfvl='terraform validate && terraform plan'
+alias tfof='terraform output -json | jq'  # Requires jq installed
+
+# Common combinations
+alias tfir='terraform init -upgrade && terraform init -reconfigure'
+alias tfpf='terraform fmt && terraform plan'
+alias tffv='terraform fmt && terraform validate'
+
+# Debug helpers
+alias tft='TF_LOG=TRACE terraform'
+alias tfd='TF_LOG=DEBUG terraform'
+alias tlog='tail -f terraform.log'  # Useful when running with TF_LOG
+
+# Initialize and select workspace in one go
+function tfiw() {
+    terraform init && terraform workspace select "$1" || terraform workspace new "$1"
+}
+
+# Plan with specific var file
+function tfpv() {
+    terraform plan -var-file="$1.tfvars"
+}
+
+# Apply with specific var file
+function tfav() {
+    terraform apply -var-file="$1.tfvars"
+}
+
+# Show specific output in JSON format
+function tfo() {
+    terraform output -json | jq ".$1"
+}
