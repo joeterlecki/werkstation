@@ -14,13 +14,9 @@ PACKAGES=(
 	apt-transport-https
 	ca-certificates
 	gnupg
-	jq
 	fuse
 	stow
-	ripgrep
-	neovim
 	cmake
-	luarocks
 )
 
 log_info "Installing common tools..."
