@@ -489,20 +489,20 @@ main() {
 	log_section "Running system updates"
 	sudo dnf update -y
 
-	# configure_dnf
-	# configure_rpmfusion
-	# remove_packages
-	# install_packages
-	# configure_multimedia
-	# configure_nvidia
-	# configure_docker
-	# configure_flatpak
-	# configure_zsh
-	# configure_services
+	configure_dnf
+	configure_rpmfusion
+	remove_packages
+	install_packages
+	configure_multimedia
+	configure_nvidia
+	configure_docker
+	configure_flatpak
+	configure_zsh
+	configure_services
 	install_fonts
-	# disable_selinux
-	# configure_hostname
-	# update_firmware
+	disable_selinux
+	configure_hostname
+	update_firmware
 
 	log_section "Installation script complete"
 	log_warn "Please log out and log back in for all changes to take effect"
