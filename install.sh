@@ -206,7 +206,6 @@ install_packages() {
 		bat
 		obs-studio
 		kitty
-		"https://downloads.slack-edge.com/desktop-releases/linux/x64/4.41.105/slack-4.41.105-0.1.el8.x86_64.rpm"
 		"https://packages.microsoft.com/yumrepos/edge/Packages/m/microsoft-edge-stable-132.0.2957.140-1.x86_64.rpm"
 		tailscale
 		docker-ce
@@ -215,11 +214,17 @@ install_packages() {
 		docker-buildx-plugin
 		docker-compose-plugin
 		vlc
+		brave-browser
+		postgresql
 	)
+
+	log_info "Insuring dnf core plugins are installed..."
+	sudo dnf install dnf-plugins-core
 
 	log_info "Adding additional repositories..."
 	sudo dnf-3 config-manager --add-repo https://pkgs.tailscale.com/stable/fedora/tailscale.repo
 	sudo dnf-3 config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+	sudo dnf config-manager addrepo --from-repofile=https://brave-browser-rpm-release.s3.brave.com/brave-browser.repo
 
 	log_info "Installing ${#PACKAGES[@]} packages..."
 	sudo dnf install -y "${PACKAGES[@]}" --skip-unavailable
@@ -477,6 +482,34 @@ install_fonts() {
 	log_info "Font installation complete"
 }
 
+install_vscode() {
+	log_section "Install Visual Studio Code"
+
+	sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
+	echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo >/dev/null
+
+	sudo dnf check-update
+	sudo dnf install code
+}
+
+install_golang() {
+	log_section "Install Golang"
+	log_info "Retrieving golang tar..."
+	wget https://go.dev/dl/go1.23.6.linux-amd64.tar.gz
+
+	log_info "Installing go via tar"
+	sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.23.6.linux-amd64.tar.gz
+}
+
+install_dotnet() {
+	log_section "Install dotnet"
+	log_info "Retrieving dotnet install script..."
+	wget https://dot.net/v1/dotnet-install.sh -O /tmp/dotnet-install.sh
+	chmod +x /tmp/dotnet-install.sh
+	/tmp/dotnet-install.sh -c lts
+
+}
+
 #===============================================================================
 # Main Installation Function
 #===============================================================================
@@ -498,20 +531,22 @@ main() {
 	log_section "Running system updates"
 	sudo dnf update -y
 
-	configure_dnf
-	configure_rpmfusion
-	remove_packages
-	install_packages
-	configure_multimedia
-	configure_nvidia
-	configure_docker
-	configure_flatpak
-	configure_zsh
-	configure_services
-	install_fonts
-	disable_selinux
-	configure_hostname
-	update_firmware
+	# configure_dnf
+	# configure_rpmfusion
+	# remove_packages
+	# install_packages
+	# configure_multimedia
+	# configure_nvidia
+	# configure_docker
+	# configure_flatpak
+	# configure_zsh
+	# configure_services
+	# install_fonts
+	# disable_selinux
+	# configure_hostname
+	install_vscode
+	install_golang
+	# update_firmware
 
 	log_section "Installation script complete"
 	log_warn "Please log out and log back in for all changes to take effect"
