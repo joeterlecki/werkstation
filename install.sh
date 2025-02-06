@@ -125,15 +125,12 @@ configure_rpmfusion() {
 	local fedora_version
 	fedora_version=$(rpm -E %fedora)
 
-	# Enable Free RPM Fusion
 	log_info "Enabling free rpm fusion repos..."
 	sudo dnf install -y "https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-${fedora_version}.noarch.rpm"
 
-	# Enable Non-Free RPM Fusion
 	log_info "Enabling nonfree rpm fusion repos..."
 	sudo dnf install -y "https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-${fedora_version}.noarch.rpm"
 
-	# Upgrade and refresh repos
 	log_info "Upgrading repos and refresh..."
 	sudo dnf upgrade --refresh -y
 
@@ -489,7 +486,9 @@ install_vscode() {
 	echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo >/dev/null
 
 	sudo dnf check-update
-	sudo dnf install code
+	sudo dnf install code -y
+
+	log_info "VS Code Installation complete"
 }
 
 install_golang() {
@@ -499,6 +498,8 @@ install_golang() {
 
 	log_info "Installing go via tar"
 	sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.23.6.linux-amd64.tar.gz
+
+	log_info "Golang installation complete"
 }
 
 install_dotnet() {
@@ -508,6 +509,25 @@ install_dotnet() {
 	chmod +x /tmp/dotnet-install.sh
 	/tmp/dotnet-install.sh -c lts
 
+	log_info "Dotnet installation complete"
+}
+
+install_awscli() {
+	log_section "Installing AWS CLI"
+
+	log_info "Retrieving AWS CLI Package..."
+	curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "/tmp/awscliv2.zip"
+
+	log_info "Unpacking awscli zip..."
+	unzip /tmp/awscliv2.zip -d /tmp/awscliv2
+
+	log_info "Running awscli installer..."
+	sudo /tmp/awscliv2/aws/install
+
+	log_info "Cleaning up installation..."
+	sudo rm -rf /tmp/awscli*
+
+	log_info "AWS Installation Complete..."
 }
 
 #===============================================================================
@@ -546,6 +566,7 @@ main() {
 	# configure_hostname
 	install_vscode
 	install_golang
+	install_awscli
 	# update_firmware
 
 	log_section "Installation script complete"
