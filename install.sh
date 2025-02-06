@@ -459,6 +459,15 @@ install_fonts() {
 	log_info "Extracting fonts to $font_dir..."
 	unzip -q -o "$temp_zip" -d "$font_dir" -x "*.txt" "*.md" "LICENSE*" "README*"
 
+	local font_url="https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/CodeNewRoman.zip"
+	local temp_zip="/tmp/CodeNewRoman.zip"
+
+	log_info "Downloading CodeNewRoman Nerd Font..."
+	wget -q "$font_url" -O "$temp_zip"
+
+	log_info "Extracting fonts to $font_dir..."
+	unzip -q -o "$temp_zip" -d "$font_dir" -x "*.txt" "*.md" "LICENSE*" "README*"
+
 	log_info "Cleaning up temporary files..."
 	rm -f "$temp_zip"
 
