@@ -11,7 +11,7 @@
 #set $mod Mod1
 
 #set Super key
-set $mod Mod1
+set $mod Mod4
 
 # Set Keyboard repeat delay and rate
 exec xset r rate 300 50 &
@@ -279,10 +279,10 @@ bindsym $mod+Shift+period exec flameshot gui
 #################                          audio settings                                           #################
 #####################################################################################################################
 
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status
-bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
-bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
+# bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status
+# bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status
+# bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
+# bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
 
 
 #####################################################################################################################
@@ -311,7 +311,7 @@ bindsym $mod+i bar mode invisible
 #if you want transparency on non-focused windows, ...
 exec_always --no-startup-id picom --config ~/.config/picom/picom.conf
 # exec_always --no-startup-id feh --no-fehbg --bg-fill --randomize $HOME/.wallpapers/field.jpg
-exec_always --no-startup-id feh --no-fehbg --bg-fill $HOME/.wallpapers/cat-waves-fix.png
+exec_always --no-startup-id feh --no-fehbg --bg-fill $HOME/.wallpapers/everfores-background.jpg
 
 #####################################################################################################################
 #####################################################################################################################
@@ -322,73 +322,33 @@ exec_always --no-startup-id feh --no-fehbg --bg-fill $HOME/.wallpapers/cat-waves
 #####################################################################################################################
 
 ### FONT ####
-font pango:Mononoki Nerd Font 14
+font pango:CaskaydiaMono Nerd Font Mono 12
 
 ### BODERS ###
 default_border pixel 2
 default_floating_border pixel 0
 
-# Catpuccin Machiatto
-set $rosewater #f5e0dc
-set $flamingo #f2cdcd
-set $pink #f5c2e7
-set $mauve #cba6f7
-set $red #f38ba8
-set $maroon #eba0ac
-set $peach #fab387
-set $yellow #f9e2af
-set $green #a6e3a1
-set $teal #94e2d5
-set $sky #89dceb
-set $sapphire #74c7ec
-set $blue #89b4fa
-set $lavender #b4befe
-set $text #cdd6f4
-set $subtext1 #bac2de
-set $subtext0 #a6adc8
-set $overlay2 #9399b2
-set $overlay1 #7f849c
-set $overlay0 #6c7086
-set $surface2 #585b70
-set $surface1 #45475a
-set $surface0 #313244
-set $base #1e1e2e
-set $mantle #181825
-set $crust #11111b
+# gaps outer 5px
+gaps inner 25px
 
-bar {
-    status_command i3status
-	  position bottom
-    font pango:Mononoki Nerd Font 14
-    tray_padding 5
-    strip_workspace_numbers yes
-    padding 2px 10px 2px 0
+# bar {
+#     status_command i3status
+# 	  position bottom
+#     font pango:CaskaydiaMono Nerd Font Mono 12
+#     tray_padding 5
+#     strip_workspace_numbers yes
+#     padding 2px 10px 2px 0
+#
+# }
 
-  colors {
-    background         $base
-    statusline         $text
-    focused_statusline $text
-    active_workspace   $base $text $blue
-    focused_separator  $base
-    focused_workspace  $base $base $green
-    active_workspace   $base $base $blue
-    inactive_workspace $base $base $surface1
-    urgent_workspace   $base $base $surface1
-    binding_mode       $base $base $surface1
-  }
-}
+exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 
-# target                 title     bg    text   indicator  border
-client.focused           $lavender $base $text  $rosewater $lavender
-client.focused_inactive  $overlay0 $base $text  $rosewater $overlay0
-client.unfocused         $overlay0 $base $text  $rosewater $overlay0
-client.urgent            $peach    $base $peach $overlay0  $peach
-client.placeholder       $overlay0 $base $text  $overlay0  $overlay0
-client.background        $base
-
-
-    ##STOP THEMING WM
-
+client.focused          #A7C080 #A7C080 #2D353B #A7C080   #A7C080
+client.focused_inactive #3D484D #2D353B #859289 #3D484D   #3D484D
+client.unfocused        #3D484D #2D353B #859289 #3D484D   #3D484D
+client.urgent           #E67E80 #E67E80 #2D353B #E67E80   #E67E80
+client.placeholder      #2D353B #2D353B #859289 #2D353B   #2D353B
+client.background       #2D353B
 #####################################################################################################################
 #####################################################################################################################
 #####################################################################################################################
