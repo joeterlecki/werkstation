@@ -17,6 +17,7 @@ PACKAGES=(
 	fuse
 	stow
 	cmake
+	jq
 )
 
 log_info "Installing common tools..."
