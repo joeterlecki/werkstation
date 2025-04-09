@@ -1,0 +1,37 @@
+---
+name: Build Werkstation OCI Sway
+on:
+  push:
+    paths:
+      - 'sway/**'
+jobs:
+  build:
+    name: Build Images
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Buildah Build
+      uses: redhat-actions/buildah-build@v2
+      with:
+        image: werkstation
+        tags: latest
+        context: ./sway/
+        layers: true
+        oci: true
+        containerfiles: |
+          ./sway/Containerfile
+    - name: 'Login to GitHub Container Registry'
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{github.actor}}
+        password: ${{secrets.GHCR_TOKEN}}
+    - name: Push To GHCR
+      id: push-to-ghcr
+      uses: redhat-actions/push-to-registry@v2
+      with:
+        image: werkstation
+        tags: latest
+        registry: ghcr.io/${{ github.repository_owner }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GHCR_TOKEN }}

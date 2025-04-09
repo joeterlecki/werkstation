@@ -1,0 +1,20 @@
+FROM quay.io/fedora-ostree-desktops/sway-atomic:41 as release
+
+ARG WEZTERM_URL="https://github.com/wezterm/wezterm/releases/download/20240203-110809-5046fc22/wezterm-20240203_110809_5046fc22-1.fedora39.x86_64.rpm"
+
+RUN echo "net.ipv4.ip_forward=1" > /etc/sysctl.d/99-ip-forward.conf && \
+    echo "net.ipv6.conf.all.forwarding=1" >> /etc/sysctl.d/99-ip-forward.conf
+
+COPY ./yum.repos.d/*.repo /etc/yum.repos.d/
+
+RUN rpm-ostree override remove firefox firefox-langpacks \
+    && rpm-ostree install \
+    tailscale \
+    zsh \
+    ${WEZTERM_URL} \
+    && rpm-ostree cleanup -m \
+    && ostree container commit
+
+LABEL name="$NAME" \
+    summary="Fedora Silverblue SWAY container" \
+    maintainer="Joe Terlecki"
