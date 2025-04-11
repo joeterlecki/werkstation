@@ -14,7 +14,3 @@ RUN rpm-ostree override remove firefox firefox-langpacks \
     ${WEZTERM_URL} \
     && rpm-ostree cleanup -m \
     && ostree container commit
-
-LABEL name="$NAME" \
-    summary="Fedora Silverblue SWAY container" \
-    maintainer="Joe Terlecki"
