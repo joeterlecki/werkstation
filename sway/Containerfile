@@ -19,3 +19,4 @@ LABEL name="$NAME" \
     summary="Fedora atomic sway container" \
     maintainer="Joe Terlecki"
 
+LABEL org.opencontainers.image.source https://github.com/joeterlecki/werkstation

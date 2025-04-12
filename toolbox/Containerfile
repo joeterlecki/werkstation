@@ -35,3 +35,5 @@ RUN dnf -y upgrade \
 LABEL name="$NAME" \
   summary="Fedora toolbox container" \
   maintainer="Joe Terlecki"
+
+LABEL org.opencontainers.image.source https://github.com/joeterlecki/werkstation
