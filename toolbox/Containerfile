@@ -1,0 +1,38 @@
+
+FROM busybox AS bun
+ARG BUN_URL="https://github.com/oven-sh/bun/releases/latest/download/bun-linux-x64.zip"
+RUN wget -q ${BUN_URL} -O ./bun-linux-x64.zip \
+  && unzip ./bun-linux-x64.zip -d ./
+
+FROM quay.io/fedora/fedora-toolbox:41 AS Release
+
+ARG YAZI_URL="https://www.rpmfind.net/linux/opensuse/tumbleweed/repo/oss/x86_64/yazi-25.3.2-1.1.x86_64.rpm"
+ARG NAME=toolbox
+
+ENV EDITOR=nvim
+
+COPY --from=bun /bun-linux-x64/bun /usr/local/bin
+COPY ./yum.repos.d/*.repo /etc/yum.repos.d/
+
+RUN dnf -y upgrade \
+  && dnf -y install \
+  ripgrep \
+  neovim \
+  zsh \
+  awscli \
+  terraform \
+  dotnet-sdk-8.0 \
+  golang \
+  go-task \ 
+  bat \
+  lsd \
+  zoxide \
+  fzf \
+  jq \
+  flatpak-xdg-utils \
+  ${YAZI_URL} \
+  && dnf clean all
+
+LABEL name="$NAME" \
+  summary="Fedora toolbox container" \
+  maintainer="Joe Terlecki"
