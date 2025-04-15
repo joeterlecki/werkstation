@@ -9,7 +9,6 @@ RUN rpm-ostree override remove firefox firefox-langpacks \
     && rpm-ostree install \
     tailscale \
     code \
-    vivaldi \
     zsh \
     && rpm-ostree cleanup -m \
     && ostree container commit
