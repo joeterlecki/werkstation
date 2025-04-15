@@ -12,6 +12,7 @@ RUN rpm-ostree override remove firefox firefox-langpacks \
     && rpm-ostree install \
     tailscale \
     code \
+    vivaldi-stable \
     zsh \
     ${WEZTERM_URL} \
     && rpm-ostree cleanup -m \
