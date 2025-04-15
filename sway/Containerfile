@@ -1,9 +1,9 @@
-FROM quay.io/fedora-ostree-desktops/sway-atomic:41 as release
+FROM quay.io/fedora-ostree-desktops/silverblue:42 as release
 
 RUN echo "net.ipv4.ip_forward=1" > /etc/sysctl.d/99-ip-forward.conf && \
     echo "net.ipv6.conf.all.forwarding=1" >> /etc/sysctl.d/99-ip-forward.conf
 
-# COPY ./yum.repos.d/*.repo /etc/yum.repos.d/
+COPY ./yum.repos.d/*.repo /etc/yum.repos.d/
 
 RUN rpm-ostree override remove firefox firefox-langpacks \
     && rpm-ostree install \
@@ -13,8 +13,6 @@ RUN rpm-ostree override remove firefox firefox-langpacks \
     https://packages.microsoft.com/yumrepos/edge/microsoft-edge-stable-135.0.3179.73-1.x86_64.rpm \
     && rpm-ostree cleanup -m \
     && ostree container commit
-
-RUN flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo \
 
 LABEL name="$NAME" \
     summary="Fedora atomic sway container" \
