@@ -10,7 +10,7 @@ RUN rpm-ostree override remove firefox firefox-langpacks \
     tailscale \
     zsh \
     code \
-    https://packages.microsoft.com/yumrepos/edge/microsoft-edge-stable-135.0.3179.73-1.x86_64.rpm \
+    "https://packages.microsoft.com/yumrepos/edge/microsoft-edge-stable-135.0.3179.73-1.x86_64.rpm" \
     && rpm-ostree cleanup -m \
     && ostree container commit
 
