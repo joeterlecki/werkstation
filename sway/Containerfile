@@ -13,7 +13,8 @@ RUN rpm-ostree override remove firefox firefox-langpacks \
     && rpm-ostree cleanup -m \
     && ostree container commit
 
-RUN flatpak install -y com.vivaldi.Vivaldi \
+RUN flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo \
+    && flatpak install -y flathub com.vivaldi.Vivaldi \
     com.visualstudio.code 
 
 LABEL name="$NAME" \
