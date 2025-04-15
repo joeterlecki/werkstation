@@ -1,0 +1,7 @@
+[edge-yum]
+name=edge-yum
+baseurl=https://packages.microsoft.com/yumrepos/edge/
+repo_gpgcheck=0
+gpgcheck=0
+enabled=1
+gpgkey=https://packages.microsoft.com/yumrepos/edge/repodata/repomd.xml.key
