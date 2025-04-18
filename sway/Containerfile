@@ -12,7 +12,7 @@ RUN rpm-ostree override remove firefox firefox-langpacks \
     code \
     i3 \
     rofi \
-    dunst
+    dunst \
     feh \
     picom \
     alacritty \
