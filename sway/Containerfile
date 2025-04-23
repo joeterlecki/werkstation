@@ -1,4 +1,4 @@
-FROM quay.io/fedora-ostree-desktops/xfce-atomic:42 as release
+FROM quay.io/fedora-ostree-desktops/silverblue:42 as release
 
 RUN echo "net.ipv4.ip_forward=1" > /etc/sysctl.d/99-ip-forward.conf && \
     echo "net.ipv6.conf.all.forwarding=1" >> /etc/sysctl.d/99-ip-forward.conf
@@ -10,11 +10,6 @@ RUN rpm-ostree override remove firefox firefox-langpacks \
     tailscale \
     zsh \
     code \
-    i3 \
-    rofi \
-    dunst \
-    feh \
-    picom \
     alacritty \
     https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-42.noarch.rpm \
     https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-42.noarch.rpm \
