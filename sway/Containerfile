@@ -69,7 +69,7 @@ RUN rpm-ostree override remove firefox firefox-langpacks \
     && ostree container commit
 
 LABEL name="${NAME}" \
-    summary="Fedora atomic sway container with developer tools" \
+    summary="Fedora atomic sway with developer tools" \
     maintainer="Joe Terlecki" \
     org.opencontainers.image.source="https://github.com/joeterlecki/werkstation" \
     org.opencontainers.image.description="Sway-based Fedora Atomic container with Bun, Zen Browser, and development tools" \
