@@ -41,11 +41,20 @@ RUN echo "net.ipv4.ip_forward=1" > /etc/sysctl.d/99-ip-forward.conf \
     && echo "net.ipv6.conf.all.forwarding=1" >> /etc/sysctl.d/99-ip-forward.conf
 
 RUN dnf5 config-manager addrepo --from-repofile='https://pkgs.tailscale.com/stable/fedora/tailscale.repo' \
-    && rpm-ostree install \
+    && dnf5 install -y \
     https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-42.noarch.rpm \
     https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-42.noarch.rpm
 
+RUN dnf5 config-manager add-repo --from-repofile='https://download.docker.com/linux/fedora/docker-ce.repo' \
+    && dnf5 install -y \
+    docker-ce \
+    docker-ce-cli \
+    containerd.io \
+    docker-buildx-plugin \
+    docker-compose-plugin
+
 RUN dnf5 install -y \
+    dnf-plugins-core \
     alacritty \
     curl \
     golang \
@@ -63,6 +72,9 @@ RUN ln -s /usr/lib/zen/zen /usr/bin/zen \
     && chmod +x /usr/bin/zen
 
 COPY ./desktop-entries/zen.desktop /usr/share/applications/zen.desktop
+
+COPY ../dotfiles/sway/config /etc/sway/
+COPY ../dotfiles/waybar/* /etc/xdg/waybar/
 
 RUN rpm-ostree override remove firefox firefox-langpacks \
     && rpm-ostree cleanup -m \

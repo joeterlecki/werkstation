@@ -18,6 +18,7 @@
         "pulseaudio",
         "network",
         "cpu",
+        "memory",
         "battery",
         "clock",
         "tray"
@@ -202,3 +203,4 @@
 		}
     }
 }
+

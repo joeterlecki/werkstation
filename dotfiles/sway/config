@@ -15,7 +15,7 @@ set $down j
 set $up k
 set $right l
 
-set $term wezterm
+set $term alacritty
 set $rofi_cmd rofi \
         -terminal '$term'
 
@@ -234,7 +234,7 @@ bindsym $mod+r mode "resize"
 # the trick, it's all in the `wordexp(3)`.
 #
 include '$(/usr/libexec/sway/layered-include "/usr/share/sway/config.d/*.conf" "/etc/sway/config.d/*.conf" "${XDG_CONFIG_HOME:-$HOME/.config}/sway/config.d/*.conf")'
-font pango:CodeNewRoman Nerd Font 16px 
+font pango:monospace 12px 
 gaps outer 10
 gaps inner 10
 smart_borders off
