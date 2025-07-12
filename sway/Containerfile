@@ -45,7 +45,7 @@ RUN dnf5 config-manager addrepo --from-repofile='https://pkgs.tailscale.com/stab
     https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-42.noarch.rpm \
     https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-42.noarch.rpm
 
-RUN dnf5 config-manager add-repo --from-repofile='https://download.docker.com/linux/fedora/docker-ce.repo' \
+RUN dnf5 config-manager addrepo --from-repofile='https://download.docker.com/linux/fedora/docker-ce.repo' \
     && dnf5 install -y \
     docker-ce \
     docker-ce-cli \
