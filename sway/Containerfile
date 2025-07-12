@@ -73,8 +73,8 @@ RUN ln -s /usr/lib/zen/zen /usr/bin/zen \
 
 COPY ./desktop-entries/zen.desktop /usr/share/applications/zen.desktop
 
-COPY ../dotfiles/sway/config /etc/sway/
-COPY ../dotfiles/waybar/* /etc/xdg/waybar/
+COPY ./dotfiles/sway/config /etc/sway/
+COPY ./dotfiles/waybar/* /etc/xdg/waybar/
 
 RUN rpm-ostree override remove firefox firefox-langpacks \
     && rpm-ostree cleanup -m \
