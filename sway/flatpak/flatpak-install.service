@@ -1,0 +1,12 @@
+[Unit]
+Description=Install Flatpaks from manifest
+After=graphical-session.target
+ConditionPathExists=/etc/flatpak-install.txt
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/install-flatpaks.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=default.target

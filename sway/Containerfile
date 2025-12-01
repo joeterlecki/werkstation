@@ -1,49 +1,40 @@
 ARG NAME="werkstation-sway"
-ARG BUN_URL="https://github.com/oven-sh/bun/releases/latest/download/bun-linux-x64.zip"
-ARG ZEN_URL="https://github.com/zen-browser/desktop/releases/latest/download/zen.linux-x86_64.tar.xz"
 ARG NERDFONTS_VERSION="3.4.0"
-ARG FONT_NAME="CascadiaMono"
-ARG NERDFONTS_URL="https://github.com/ryanoasis/nerd-fonts/releases/download/v${NERDFONTS_VERSION}/${FONT_NAME}.zip"
-
-FROM busybox AS bun
-ARG BUN_URL
-RUN wget -q ${BUN_URL} -O ./bun-linux-x64.zip \
-    && unzip ./bun-linux-x64.zip -d ./ \
-    && rm ./bun-linux-x64.zip
-
-FROM busybox AS zen
-ARG ZEN_URL
-RUN wget -q ${ZEN_URL} -O ./zen.tar.xz \
-    && tar -xJf ./zen.tar.xz \
-    && mkdir -p /zen-install/usr/lib/zen \
-    && mkdir -p /zen-install/usr/share/applications \
-    && mkdir -p /zen-install/usr/share/icons/hicolor/128x128/apps \
-    && mv zen/* /zen-install/usr/lib/zen/ \
-    && cp /zen-install/usr/lib/zen/browser/chrome/icons/default/default128.png \
-    /zen-install/usr/share/icons/hicolor/128x128/apps/zen.png \
-    && rm ./zen.tar.xz
+ARG GO_VERSION="1.25.4"
 
 FROM busybox AS nerdfonts
-ARG NERDFONTS_URL
-RUN wget -q ${NERDFONTS_URL} -O ./font.zip \
+RUN wget -q "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/CascadiaCode.zip?agree=true" -O ./cc_font.zip \
     && mkdir -p /fonts-install/usr/local/share/fonts \
-    && unzip ./font.zip -d /fonts-install/usr/local/share/fonts/ \
-    && rm ./font.zip
+    && unzip -o ./cc_font.zip -d /fonts-install/usr/local/share/fonts/ \
+    && rm ./cc_font.zip
+RUN wget -q "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/NerdFontsSymbolsOnly.zip?agree=true" -O ./nfs_font.zip \
+    && mkdir -p /fonts-install/usr/local/share/fonts \
+    && unzip -o ./nfs_font.zip -d /fonts-install/usr/local/share/fonts/ \
+    && rm ./nfs_font.zip
 
-FROM quay.io/fedora-ostree-desktops/sway-atomic:42 as release
-ARG NAME
+FROM busybox AS go-binary
+ARG GO_VERSION
+RUN wget -q "https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz" -O /tmp/go.tar.gz \
+    && mkdir -p /go-install/usr/local \
+    && tar -C /go-install/usr/local -xzf /tmp/go.tar.gz \
+    && rm /tmp/go.tar.gz
 
-COPY --from=bun /bun-linux-x64/bun /usr/local/bin/
-COPY --from=zen /zen-install/usr /usr/
+FROM quay.io/fedora-ostree-desktops/sway-atomic:43 as release
+
 COPY --from=nerdfonts /fonts-install/usr /usr/
+COPY --from=go-binary /go-install/usr/local/go /usr/local/go
+
+ENV PATH="/usr/local/go/bin:${PATH}" \
+    GOPATH="/usr/local/go-packages" \
+    GOCACHE="/var/cache/go-build"
 
 RUN echo "net.ipv4.ip_forward=1" > /etc/sysctl.d/99-ip-forward.conf \
     && echo "net.ipv6.conf.all.forwarding=1" >> /etc/sysctl.d/99-ip-forward.conf
 
 RUN dnf5 config-manager addrepo --from-repofile='https://pkgs.tailscale.com/stable/fedora/tailscale.repo' \
     && dnf5 install -y \
-    https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-42.noarch.rpm \
-    https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-42.noarch.rpm
+    https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-43.noarch.rpm \
+    https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-43.noarch.rpm
 
 RUN dnf5 config-manager addrepo --from-repofile='https://download.docker.com/linux/fedora/docker-ce.repo' \
     && dnf5 install -y \
@@ -55,26 +46,41 @@ RUN dnf5 config-manager addrepo --from-repofile='https://download.docker.com/lin
 
 RUN dnf5 install -y \
     dnf-plugins-core \
-    alacritty \
+    unzip \
+    git \
+    wget \
     curl \
-    golang \
     jq \
     neovim \
+    emacs \
+    kitty \
     ripgrep \
     stow \
     tailscale \
     tmux \
     tree-sitter-cli \
+    node \
     zsh \
     && dnf clean all
 
-RUN ln -s /usr/lib/zen/zen /usr/bin/zen \
-    && chmod +x /usr/bin/zen
+RUN curl -sSL https://dot.net/v1/dotnet-install.sh -o /tmp/dotnet-install.sh \
+    && chmod +x /tmp/dotnet-install.sh \
+    && /tmp/dotnet-install.sh --channel 8.0 --install-dir /usr/local/dotnet \
+    && /tmp/dotnet-install.sh --channel 9.0 --install-dir /usr/local/dotnet \
+    && /tmp/dotnet-install.sh --channel 10.0 --install-dir /usr/local/dotnet \
+    && rm /tmp/dotnet-install.sh
 
-COPY ./desktop-entries/zen.desktop /usr/share/applications/zen.desktop
+ENV DOTNET_ROOT="/usr/local/dotnet" \
+    PATH="/usr/local/dotnet:${PATH}" \
+    DOTNET_CLI_TELEMETRY_OPTOUT=1
 
-COPY ./dotfiles/sway/config /etc/sway/
-COPY ./dotfiles/waybar/* /etc/xdg/waybar/
+COPY flatpak/flatpak.txt /etc/flatpak-install.txt
+COPY flatpak/install-flatpaks.sh /usr/local/bin/install-flatpaks.sh
+RUN chmod +x /usr/local/bin/install-flatpaks.sh
+
+COPY flatpak/flatpak-install.service /usr/lib/systemd/user/flatpak-install.service
+RUN mkdir -p /usr/lib/systemd/user/default.target.wants \
+    && ln -s ../flatpak-install.service /usr/lib/systemd/user/default.target.wants/flatpak-install.service
 
 RUN rpm-ostree override remove firefox firefox-langpacks \
     && rpm-ostree cleanup -m \
@@ -84,5 +90,5 @@ LABEL name="${NAME}" \
     summary="Fedora atomic sway with developer tools" \
     maintainer="Joe Terlecki" \
     org.opencontainers.image.source="https://github.com/joeterlecki/werkstation" \
-    org.opencontainers.image.description="Sway-based Fedora Atomic container with Bun, Zen Browser, and development tools" \
-    org.opencontainers.image.version="42"
+    org.opencontainers.image.description="Sway-based Fedora Atomic container with development tools" \
+    org.opencontainers.image.version="43"
