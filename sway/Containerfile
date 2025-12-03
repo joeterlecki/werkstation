@@ -2,23 +2,22 @@ ARG NAME="werkstation-sway"
 ARG NERDFONTS_VERSION="3.4.0"
 
 FROM busybox:latest AS nerdfonts
-RUN wget -q "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/CascadiaCode.zip?agree=true" -O ./cc_font.zip \
+ARG NERDFONTS_VERSION
+RUN wget -q "https://github.com/ryanoasis/nerd-fonts/releases/download/v${NERDFONTS_VERSION}/CascadiaCode.zip?agree=true" -O ./cc_font.zip \
     && mkdir -p /fonts-install/usr/local/share/fonts \
     && unzip -o ./cc_font.zip -d /fonts-install/usr/local/share/fonts/ \
-    && rm ./cc_font.zip
-
-RUN wget -q "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/NerdFontsSymbolsOnly.zip?agree=true" -O ./nfs_font.zip \
-    && mkdir -p /fonts-install/usr/local/share/fonts \
+    && rm ./cc_font.zip \
+    && wget -q "https://github.com/ryanoasis/nerd-fonts/releases/download/v${NERDFONTS_VERSION}/NerdFontsSymbolsOnly.zip?agree=true" -O ./nfs_font.zip \
     && unzip -o ./nfs_font.zip -d /fonts-install/usr/local/share/fonts/ \
     && rm ./nfs_font.zip
 
 FROM busybox:latest AS homebrew
 RUN wget -qO- https://github.com/Homebrew/brew/archive/refs/heads/master.tar.gz | tar xz \
-    && mv brew-master /homebrew-install
+    && mv brew-master /homebrew
 
 FROM quay.io/fedora-ostree-desktops/sway-atomic:43 as release
+
 COPY --from=nerdfonts /fonts-install/usr /usr/
-COPY --from=homebrew /homebrew-install /opt/linuxbrew
 
 RUN echo "net.ipv4.ip_forward=1" > /etc/sysctl.d/99-ip-forward.conf \
     && echo "net.ipv6.conf.all.forwarding=1" >> /etc/sysctl.d/99-ip-forward.conf
@@ -28,6 +27,7 @@ RUN dnf5 config-manager addrepo --from-repofile='https://pkgs.tailscale.com/stab
     https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-43.noarch.rpm \
     https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-43.noarch.rpm
 
+# Install packages (changes occasionally)
 RUN dnf5 install -y \
     dnf-plugins-core \
     unzip \
@@ -41,24 +41,19 @@ RUN dnf5 install -y \
     @development-tools \
     && dnf clean all
 
-RUN curl -sSL https://dot.net/v1/dotnet-install.sh -o /tmp/dotnet-install.sh \
-    && chmod +x /tmp/dotnet-install.sh \
-    && /tmp/dotnet-install.sh --channel 8.0 --install-dir /usr/local/dotnet \
-    && /tmp/dotnet-install.sh --channel 9.0 --install-dir /usr/local/dotnet \
-    && /tmp/dotnet-install.sh --channel 10.0 --install-dir /usr/local/dotnet \
-    && rm /tmp/dotnet-install.sh
+COPY --from=homebrew /homebrew /home/linuxbrew/.linuxbrew/Homebrew
+RUN mkdir -p /home/linuxbrew/.linuxbrew/bin \
+    && ln -s /home/linuxbrew/.linuxbrew/Homebrew/bin/brew /home/linuxbrew/.linuxbrew/bin/brew \
+    && chmod -R a+rX /home/linuxbrew
 
-RUN chmod -R 777 /opt/linuxbrew
-RUN echo 'eval "$(/opt/linuxbrew/bin/brew shellenv)"' > /etc/profile.d/linuxbrew.sh \
+RUN echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' > /etc/profile.d/linuxbrew.sh \
     && chmod +x /etc/profile.d/linuxbrew.sh
 
 COPY flatpak/flatpak.txt /etc/flatpak-install.txt
 COPY flatpak/install-flatpaks.sh /usr/local/bin/install-flatpaks.sh
-
 RUN chmod +x /usr/local/bin/install-flatpaks.sh
 
 COPY flatpak/flatpak-install.service /usr/lib/systemd/user/flatpak-install.service
-
 RUN mkdir -p /usr/lib/systemd/user/default.target.wants \
     && ln -s ../flatpak-install.service /usr/lib/systemd/user/default.target.wants/flatpak-install.service
 
