@@ -12,11 +12,6 @@ RUN wget -q "https://github.com/ryanoasis/nerd-fonts/releases/download/v${NERDFO
     && unzip -o ./nfs_font.zip -d /fonts-install/usr/local/share/fonts/ \
     && rm ./nfs_font.zip
 
-# Stage 2: Homebrew (rarely changes)
-FROM busybox:latest AS homebrew
-RUN wget -qO- https://github.com/Homebrew/brew/archive/refs/heads/master.tar.gz | tar xz \
-    && mv brew-master /homebrew
-
 FROM quay.io/fedora-ostree-desktops/sway-atomic:43 as release
 
 # Copy static assets first (rarely change)
@@ -46,17 +41,16 @@ RUN dnf5 install -y \
     @development-tools \
     && dnf clean all
 
-# Install Homebrew to /var/home from pre-built stage
-COPY --from=homebrew /homebrew /var/home/linuxbrew/.linuxbrew/Homebrew
-RUN mkdir -p /var/home/linuxbrew/.linuxbrew/bin \
-    && ln -s /var/home/linuxbrew/.linuxbrew/Homebrew/bin/brew /var/home/linuxbrew/.linuxbrew/bin/brew \
-    && chmod -R 755 /var/home/linuxbrew
-
-# Setup Homebrew for all users
-RUN echo 'eval "$(/var/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' > /etc/profile.d/linuxbrew.sh \
+RUN echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' > /etc/profile.d/linuxbrew.sh \
     && chmod +x /etc/profile.d/linuxbrew.sh
 
-# Copy flatpak files (change frequently) - do this LAST
+COPY homebrew/install-homebrew.sh /usr/local/bin/install-homebrew.sh
+RUN chmod +x /usr/local/bin/install-homebrew.sh
+
+COPY homebrew/brew-install.service /usr/lib/systemd/user/brew-install.service
+RUN mkdir -p /usr/lib/systemd/user/default.target.wants \
+    && ln -s ../brew-install.service /usr/lib/systemd/user/default.target.wants/brew-install.service
+
 COPY flatpak/flatpak.txt /etc/flatpak-install.txt
 COPY flatpak/install-flatpaks.sh /usr/local/bin/install-flatpaks.sh
 RUN chmod +x /usr/local/bin/install-flatpaks.sh
@@ -65,7 +59,6 @@ COPY flatpak/flatpak-install.service /usr/lib/systemd/user/flatpak-install.servi
 RUN mkdir -p /usr/lib/systemd/user/default.target.wants \
     && ln -s ../flatpak-install.service /usr/lib/systemd/user/default.target.wants/flatpak-install.service
 
-# Final cleanup (always runs)
 RUN rpm-ostree override remove firefox firefox-langpacks \
     && rpm-ostree cleanup -m \
     && ostree container commit
