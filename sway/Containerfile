@@ -41,15 +41,12 @@ RUN dnf5 install -y \
     @development-tools \
     && dnf clean all
 
-RUN echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' > /etc/profile.d/linuxbrew.sh \
-    && chmod +x /etc/profile.d/linuxbrew.sh
-
 COPY homebrew/install-homebrew.sh /usr/local/bin/install-homebrew.sh
 RUN chmod +x /usr/local/bin/install-homebrew.sh
 
-COPY homebrew/brew-install.service /usr/lib/systemd/user/brew-install.service
-RUN mkdir -p /usr/lib/systemd/user/default.target.wants \
-    && ln -s ../brew-install.service /usr/lib/systemd/user/default.target.wants/brew-install.service
+COPY homebrew/brew-install.service /usr/lib/systemd/system/brew-install.service
+RUN mkdir -p /usr/lib/systemd/system/multi-user.target.wants \
+    && ln -s ../brew-install.service /usr/lib/systemd/system/multi-user.target.wants/brew-install.service
 
 COPY flatpak/flatpak.txt /etc/flatpak-install.txt
 COPY flatpak/install-flatpaks.sh /usr/local/bin/install-flatpaks.sh
