@@ -1,7 +1,6 @@
 ARG NAME="werkstation-sway"
 ARG NERDFONTS_VERSION="3.4.0"
 
-# Stage 1: NerdFonts (rarely changes)
 FROM busybox:latest AS nerdfonts
 ARG NERDFONTS_VERSION
 RUN wget -q "https://github.com/ryanoasis/nerd-fonts/releases/download/v${NERDFONTS_VERSION}/CascadiaCode.zip?agree=true" -O ./cc_font.zip \
@@ -14,20 +13,16 @@ RUN wget -q "https://github.com/ryanoasis/nerd-fonts/releases/download/v${NERDFO
 
 FROM quay.io/fedora-ostree-desktops/sway-atomic:43 as release
 
-# Copy static assets first (rarely change)
 COPY --from=nerdfonts /fonts-install/usr /usr/
 
-# System configuration (rarely changes)
 RUN echo "net.ipv4.ip_forward=1" > /etc/sysctl.d/99-ip-forward.conf \
     && echo "net.ipv6.conf.all.forwarding=1" >> /etc/sysctl.d/99-ip-forward.conf
 
-# Add repos (changes occasionally)
 RUN dnf5 config-manager addrepo --from-repofile='https://pkgs.tailscale.com/stable/fedora/tailscale.repo' \
     && dnf5 install -y \
     https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-43.noarch.rpm \
     https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-43.noarch.rpm
 
-# Install packages (changes occasionally)
 RUN dnf5 install -y \
     dnf-plugins-core \
     unzip \
@@ -40,13 +35,6 @@ RUN dnf5 install -y \
     zsh \
     @development-tools \
     && dnf clean all
-
-COPY homebrew/install-homebrew.sh /usr/local/bin/install-homebrew.sh
-RUN chmod +x /usr/local/bin/install-homebrew.sh
-
-COPY homebrew/brew-install.service /usr/lib/systemd/system/brew-install.service
-RUN mkdir -p /usr/lib/systemd/system/multi-user.target.wants \
-    && ln -s ../brew-install.service /usr/lib/systemd/system/multi-user.target.wants/brew-install.service
 
 COPY flatpak/flatpak.txt /etc/flatpak-install.txt
 COPY flatpak/install-flatpaks.sh /usr/local/bin/install-flatpaks.sh
