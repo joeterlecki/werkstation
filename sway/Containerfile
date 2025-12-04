@@ -1,6 +1,7 @@
 ARG NAME="werkstation-sway"
 ARG NERDFONTS_VERSION="3.4.0"
 
+# Stage 1: NerdFonts (rarely changes)
 FROM busybox:latest AS nerdfonts
 ARG NERDFONTS_VERSION
 RUN wget -q "https://github.com/ryanoasis/nerd-fonts/releases/download/v${NERDFONTS_VERSION}/CascadiaCode.zip?agree=true" -O ./cc_font.zip \
@@ -11,17 +12,21 @@ RUN wget -q "https://github.com/ryanoasis/nerd-fonts/releases/download/v${NERDFO
     && unzip -o ./nfs_font.zip -d /fonts-install/usr/local/share/fonts/ \
     && rm ./nfs_font.zip
 
+# Stage 2: Homebrew (rarely changes)
 FROM busybox:latest AS homebrew
 RUN wget -qO- https://github.com/Homebrew/brew/archive/refs/heads/master.tar.gz | tar xz \
     && mv brew-master /homebrew
 
 FROM quay.io/fedora-ostree-desktops/sway-atomic:43 as release
 
+# Copy static assets first (rarely change)
 COPY --from=nerdfonts /fonts-install/usr /usr/
 
+# System configuration (rarely changes)
 RUN echo "net.ipv4.ip_forward=1" > /etc/sysctl.d/99-ip-forward.conf \
     && echo "net.ipv6.conf.all.forwarding=1" >> /etc/sysctl.d/99-ip-forward.conf
 
+# Add repos (changes occasionally)
 RUN dnf5 config-manager addrepo --from-repofile='https://pkgs.tailscale.com/stable/fedora/tailscale.repo' \
     && dnf5 install -y \
     https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-43.noarch.rpm \
@@ -41,14 +46,17 @@ RUN dnf5 install -y \
     @development-tools \
     && dnf clean all
 
-COPY --from=homebrew /homebrew /home/linuxbrew/.linuxbrew/Homebrew
-RUN mkdir -p /home/linuxbrew/.linuxbrew/bin \
-    && ln -s /home/linuxbrew/.linuxbrew/Homebrew/bin/brew /home/linuxbrew/.linuxbrew/bin/brew \
-    && chmod -R a+rX /home/linuxbrew
+# Install Homebrew to /var/home from pre-built stage
+COPY --from=homebrew /homebrew /var/home/linuxbrew/.linuxbrew/Homebrew
+RUN mkdir -p /var/home/linuxbrew/.linuxbrew/bin \
+    && ln -s /var/home/linuxbrew/.linuxbrew/Homebrew/bin/brew /var/home/linuxbrew/.linuxbrew/bin/brew \
+    && chmod -R 755 /var/home/linuxbrew
 
-RUN echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' > /etc/profile.d/linuxbrew.sh \
+# Setup Homebrew for all users
+RUN echo 'eval "$(/var/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' > /etc/profile.d/linuxbrew.sh \
     && chmod +x /etc/profile.d/linuxbrew.sh
 
+# Copy flatpak files (change frequently) - do this LAST
 COPY flatpak/flatpak.txt /etc/flatpak-install.txt
 COPY flatpak/install-flatpaks.sh /usr/local/bin/install-flatpaks.sh
 RUN chmod +x /usr/local/bin/install-flatpaks.sh
@@ -57,6 +65,7 @@ COPY flatpak/flatpak-install.service /usr/lib/systemd/user/flatpak-install.servi
 RUN mkdir -p /usr/lib/systemd/user/default.target.wants \
     && ln -s ../flatpak-install.service /usr/lib/systemd/user/default.target.wants/flatpak-install.service
 
+# Final cleanup (always runs)
 RUN rpm-ostree override remove firefox firefox-langpacks \
     && rpm-ostree cleanup -m \
     && ostree container commit
