@@ -9,6 +9,13 @@ fi
 
 echo "Installing Homebrew..."
 
-NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+mkdir -p /home/linuxbrew/.linuxbrew
+
+git clone https://github.com/Homebrew/brew "${BREW_PREFIX}/Homebrew"
+
+mkdir -p "${BREW_PREFIX}/bin"
+ln -s "${BREW_PREFIX}/Homebrew/bin/brew" "${BREW_PREFIX}/bin/brew"
+
+chmod -R 755 /home/linuxbrew
 
 echo "Homebrew installed successfully"
