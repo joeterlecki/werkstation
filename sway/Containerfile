@@ -18,6 +18,8 @@ COPY --from=nerdfonts /fonts-install/usr /usr/
 RUN echo "net.ipv4.ip_forward=1" > /etc/sysctl.d/99-ip-forward.conf \
     && echo "net.ipv6.conf.all.forwarding=1" >> /etc/sysctl.d/99-ip-forward.conf
 
+RUN sed -i 's/^SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
+
 RUN mkdir -p /usr/local/bin \
     && curl -L -o /tmp/devpod "https://github.com/loft-sh/devpod/releases/latest/download/devpod-linux-amd64" \
     && install -c -m 0755 /tmp/devpod /usr/local/bin/devpod \
@@ -38,6 +40,8 @@ RUN dnf5 install -y \
     kitty \
     tailscale \
     zsh \
+    nmap-ncat \
+    steam-devices \
     @development-tools \
     && dnf clean all
 
@@ -48,6 +52,10 @@ RUN chmod +x /usr/local/bin/install-flatpaks.sh
 COPY flatpak/flatpak-install.service /usr/lib/systemd/user/flatpak-install.service
 RUN mkdir -p /usr/lib/systemd/user/default.target.wants \
     && ln -s ../flatpak-install.service /usr/lib/systemd/user/default.target.wants/flatpak-install.service
+
+RUN cp /usr/share/applications/org.mozilla.firefox.desktop /usr/local/share/applications/ \
+    && sed -i "2a\\NotShowIn=GNOME;KDE" /usr/local/share/applications/org.mozilla.firefox.desktop \
+    && update-desktop-database /usr/local/share/applications
 
 RUN rpm-ostree override remove firefox firefox-langpacks \
     && rpm-ostree cleanup -m \
