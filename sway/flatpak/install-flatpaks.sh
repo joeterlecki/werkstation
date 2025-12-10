@@ -45,4 +45,7 @@ while IFS= read -r app; do
     
 done < "${MANIFEST_FILE}"
 
+echo "Setting Zen as Default Browser" | tee -a "${LOG_FILE}"
+xdg-settings set default-web-browser app.zen_browser.zen.desktop
+
 echo "Flatpak installation completed at $(date)" | tee -a "${LOG_FILE}"

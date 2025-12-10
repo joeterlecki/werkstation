@@ -1,2 +1,7 @@
 app.zen_browser.zen
+com.github.tchx84.Flatseal
 com.slack.Slack
+com.valvesoftware.Steam
+md.obsidian.Obsidian
+org.flameshot.Flameshot
+org.mozilla.firefox
