@@ -15,7 +15,7 @@ jobs:
         with:
           image: werkstation
           tags: latest
-          context: ./sway/
+          context: .
           layers: true
           oci: true
           containerfiles: |
