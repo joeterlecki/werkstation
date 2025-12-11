@@ -30,17 +30,19 @@ RUN dnf5 config-manager addrepo --from-repofile='https://pkgs.tailscale.com/stab
     https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-43.noarch.rpm \
     https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-43.noarch.rpm
 
+RUN dnf5 copr enable agriffis/neovim-nightly
+
 RUN dnf5 install -y \
     dnf-plugins-core \
     unzip \
     git \
     wget \
     curl \
-    neovim \
     kitty \
     tailscale \
     zsh \
     nmap-ncat \
+    neovim \
     steam-devices \
     @development-tools \
     && dnf clean all
