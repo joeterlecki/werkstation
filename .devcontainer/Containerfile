@@ -1,0 +1,33 @@
+FROM mcr.microsoft.com/devcontainers/base:ubuntu-24.04
+
+RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
+  && apt-get -y install --no-install-recommends \
+  build-essential \
+  curl \
+  git \
+  procps \
+  file \
+  && apt-get clean -y && rm -rf /var/lib/apt/lists/*
+
+RUN chmod -x /etc/update-motd.d/* && echo '#!/bin/sh\necho ""\necho "  🚀 DevContainer Ready"\necho "  📦 Go • Bun • Neovim • Ripgrep • Tree-sitter"\necho ""' > /etc/update-motd.d/00-custom && chmod +x /etc/update-motd.d/00-custom && rm -f /etc/legal
+
+USER vscode
+
+RUN /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+ENV PATH="/home/linuxbrew/.linuxbrew/bin:${PATH}"
+
+RUN brew install \
+  neovim \
+  ripgrep \
+  tree-sitter
+
+RUN brew install oven-sh/bun/bun go
+
+RUN echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.bashrc
+
+USER root
+
+RUN echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /etc/profile.d/brew.sh
+
+WORKDIR /workspaces

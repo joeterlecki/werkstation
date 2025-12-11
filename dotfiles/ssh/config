@@ -1,0 +1,10 @@
+Host *
+  StrictHostKeyChecking no
+
+Host *.container
+    HostName localhost
+    User vscode
+    Port 2222
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+    LogLevel ERROR

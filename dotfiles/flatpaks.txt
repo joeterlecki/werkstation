@@ -1,8 +1,0 @@
-app.zen_browser.zen
-com.github.tchx84.Flatseal
-com.obsproject.Studio
-com.slack.Slack
-com.visualstudio.code
-me.proton.Mail
-me.proton.Pass
-org.flameshot.Flameshot

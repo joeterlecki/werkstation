@@ -1,0 +1,26 @@
+{
+  "name": "${localWorkspaceFolderBasename}",
+  "build": {
+    "dockerfile": "Containerfile",
+    "context": "."
+  },
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "runArgs": [
+    "--userns=keep-id",
+    "--security-opt=label=disable",
+    "--name=${localWorkspaceFolderBasename}",
+    "--replace",
+    "--network=devcontainers",
+    "--publish=2222"
+  ],
+  "features": {
+    "ghcr.io/devcontainers/features/sshd:1": {}
+  },
+  "containerUser": "vscode",
+  "remoteUser": "vscode",
+  "mounts": [
+    "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind",
+    "source=${localEnv:HOME}/.gitconfig,target=/home/vscode/.gitconfig,type=bind,readonly"
+  ],
+  "postCreateCommand": "echo 'cd /workspaces/${localWorkspaceFolderBasename} 2>/dev/null || true' >> ~/.bashrc && cat ~/.ssh/id_ed25519.pub >> ~/.ssh/authorized_keys 2>/dev/null || true"
+}
