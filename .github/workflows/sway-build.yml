@@ -2,8 +2,8 @@
 name: Build Werkstation OCI Sway
 on:
   push:
-    paths:
-      - "sway/**"
+    branches:
+      - main
 jobs:
   build:
     name: Build Images
