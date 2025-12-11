@@ -25,13 +25,6 @@ RUN mkdir -p /usr/local/bin \
     && install -c -m 0755 /tmp/devpod /usr/local/bin/devpod \
     && rm -f /tmp/devpod
 
-RUN dnf5 config-manager addrepo --from-repofile='https://pkgs.tailscale.com/stable/fedora/tailscale.repo' \
-    && dnf5 install -y \
-    https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-43.noarch.rpm \
-    https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-43.noarch.rpm
-
-RUN dnf5 copr enable agriffis/neovim-nightly
-
 RUN dnf5 install -y \
     dnf-plugins-core \
     unzip \
@@ -47,17 +40,13 @@ RUN dnf5 install -y \
     @development-tools \
     && dnf clean all
 
-COPY flatpak/flatpak.txt /etc/flatpak-install.txt
+COPY flatpak/flatpak-install.txt /etc/flatpak-install.txt
 COPY flatpak/install-flatpaks.sh /usr/local/bin/install-flatpaks.sh
 RUN chmod +x /usr/local/bin/install-flatpaks.sh
 
 COPY flatpak/flatpak-install.service /usr/lib/systemd/user/flatpak-install.service
 RUN mkdir -p /usr/lib/systemd/user/default.target.wants \
     && ln -s ../flatpak-install.service /usr/lib/systemd/user/default.target.wants/flatpak-install.service
-
-RUN rpm-ostree override remove firefox firefox-langpacks \
-    && rpm-ostree cleanup -m \
-    && ostree container commit
 
 LABEL name="${NAME}" \
     summary="Fedora atomic sway with developer tools" \
